@@ -2,10 +2,21 @@
   "name": "root",
   "private": true,
   "devDependencies": {
-    "lerna": "^3.22.1"
+    "lerna": "^3.22.1",
+    "eslint": "^6.6.0",
+    "eslint-config-53js": "^1.2.0",
+    "eslint-plugin-import": "2.20.1",
+    "eslint-plugin-jest": "^23.7.0",
+    "eslint-plugin-react": "7.19.0",
+    "eslint-plugin-react-hooks": "^2.3.0",
+    "serverless": "^1.71.3",
+    "serverless-jetpack": "^0.10.6"
   },
   "version": "1.0.1",
   "main": "index.js",
   "author": "Swabahadine Abdallah <swabmed@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ]
 }
