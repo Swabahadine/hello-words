@@ -2,22 +2,11 @@ const {
 	application,
 	log,
 } = require('express-server-app');
+const handleWordService = require('./service/handleWord');
 
-const axios = require('axios');
+const url = 'https://alligator.io/react/whats-new-in-react-16.9/';
 
-const config = {
-	method: 'get',
-	url: 'https://fr.reactjs.org/',
-	headers: { },
-};
-
-axios(config)
-	.then((response) => {
-		console.log(JSON.stringify(response.data));
-	})
-	.catch((error) => {
-		console.log(error);
-	});
+handleWordService.fetchTextFromUrl(url);
 
 const api = require('./api');
 

@@ -12,6 +12,9 @@
     "serverless": "^1.71.3",
     "serverless-jetpack": "^0.10.6"
   },
+  "scripts": {
+    "start:api": "lerna run start --stream --scope api"
+  },
   "version": "1.0.1",
   "main": "index.js",
   "author": "Swabahadine Abdallah <swabmed@gmail.com>",
