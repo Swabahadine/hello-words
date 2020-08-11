@@ -2,7 +2,7 @@ const natural = require('natural');
 const axios = require('axios');
 const { parse } = require('node-html-parser');
 
-// const GroupServices = require('./Group');
+const GroupServices = require('./Group');
 
 // const wordnet = new natural.WordNet();
 
@@ -16,7 +16,7 @@ const { parse } = require('node-html-parser');
 
 const tokenizer = new natural.OrthographyTokenizer({ langage: 'en' });
 
-module.exports.fetchTextFromUrl = async (urls) => {
+module.exports.fetchTextFromUrl = async (urls, category) => {
 	const data = {};
 	let rootTok = [];
 	await Promise.all(urls.map(async (url) => {
@@ -38,19 +38,12 @@ module.exports.fetchTextFromUrl = async (urls) => {
 		const word = w.toLowerCase();
 		data[word] = data[word] ? data[word] + pr : pr;
 	}));
-	// const resData = {};
-	// const results = Object.keys(data)
-	// 	.sort((a, b) => data[b] - data[a])
-	// 	.map((w) => {
-	// 		resData[w] = data[w];
-	// 		return { name: w, weight: data[w] };
-	// 	});
-	// GroupServices.create('informatique', results)
-	// 	.then((res) => {
-	// 		console.log(res);
-	// 	})
-	// 	.catch((err) => {
-	// 		console.log(err);
-	// 	});
-	//console.log(results);
+	const resData = {};
+	const results = Object.keys(data)
+		.sort((a, b) => data[b] - data[a])
+		.map((w) => {
+			resData[w] = data[w];
+			return { name: w, weight: data[w] };
+		});
+	return GroupServices.create(category, results);
 };
