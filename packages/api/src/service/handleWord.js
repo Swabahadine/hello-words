@@ -2,26 +2,55 @@ const natural = require('natural');
 const axios = require('axios');
 const { parse } = require('node-html-parser');
 
+// const GroupServices = require('./Group');
+
+// const wordnet = new natural.WordNet();
+
+// const wordInterpret = (word) => new Promise((resolve) => {
+// 	wordnet.lookup(word, (results) => {
+// 		const firstResult = results[0];
+// 		const res = firstResult ? firstResult.lemma : word;
+// 		resolve(res);
+// 	});
+// });
+
 const tokenizer = new natural.OrthographyTokenizer({ langage: 'en' });
 
-module.exports.fetchTextFromUrl = async (url) => {
-	const config = {
-		method: 'get',
-		url,
-		headers: { },
-	};
-
-	const response = await axios(config);
+module.exports.fetchTextFromUrl = async (urls) => {
 	const data = {};
-	const html = JSON.stringify(response.data);
-	const root = parse(html);
-	const rootTok = tokenizer.tokenize(root.rawText);
+	let rootTok = [];
+	await Promise.all(urls.map(async (url) => {
+		const config = {
+			method: 'get',
+			url,
+			headers: { },
+		};
+		const response = await axios(config);
+		const html = JSON.stringify(response.data);
+		const root = parse(html);
+		rootTok = [...rootTok, ...tokenizer.tokenize(root.rawText)];
+	}));
+	//const x = 100 / rootTok.length;
+	const pr = 1; //parseFloat(x);
 	// natural.PorterStemmer.attach();
 	// const rootTok = root.rawText.tokenizeAndStem();
-	rootTok.forEach((w) => {
+	await Promise.all(rootTok.map(async (w) => {
 		const word = w.toLowerCase();
-		//const word = natural.PorterStemmer.stem(w);
-		data[word] = data[word] ? data[word] + 1 : 1;
-	});
-	console.log(Object.keys(data).sort((a, b) => data[b] - data[a]).map((w) => ({ [w]: data[w] })));
+		data[word] = data[word] ? data[word] + pr : pr;
+	}));
+	// const resData = {};
+	// const results = Object.keys(data)
+	// 	.sort((a, b) => data[b] - data[a])
+	// 	.map((w) => {
+	// 		resData[w] = data[w];
+	// 		return { name: w, weight: data[w] };
+	// 	});
+	// GroupServices.create('informatique', results)
+	// 	.then((res) => {
+	// 		console.log(res);
+	// 	})
+	// 	.catch((err) => {
+	// 		console.log(err);
+	// 	});
+	//console.log(results);
 };
