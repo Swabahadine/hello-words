@@ -14439,6 +14439,13 @@ react-is@^16.12.0, react-is@^16.8.1, react-is@^16.8.4:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
+react-query@^2.5.13:
+  version "2.5.13"
+  resolved "https://registry.yarnpkg.com/react-query/-/react-query-2.5.13.tgz#0948e044416562c4c58c966c27387ce4037bbf5a"
+  integrity sha512-jdpHWav8hh8KwIL6v021/S1jE7GTKBcZe7o86MfKObZ7fIAz8Rx6HhC8Pej5MwcR//uESdnfNoyr+OQr2Pbfeg==
+  dependencies:
+    ts-toolbelt "^6.9.4"
+
 react-scripts@3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/react-scripts/-/react-scripts-3.4.1.tgz#f551298b5c71985cc491b9acf3c8e8c0ae3ada0a"
@@ -16740,6 +16747,11 @@ ts-pnp@^1.1.6:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/ts-pnp/-/ts-pnp-1.2.0.tgz#a500ad084b0798f1c3071af391e65912c86bca92"
   integrity sha512-csd+vJOb/gkzvcCHgTGSChYpy5f1/XKNsmvBGO4JXS+z1v2HobugDz4s1IeFXM3wZB44uczs+eazB5Q/ccdhQw==
+
+ts-toolbelt@^6.9.4:
+  version "6.15.3"
+  resolved "https://registry.yarnpkg.com/ts-toolbelt/-/ts-toolbelt-6.15.3.tgz#d9fdf5cc8f08e21c459671386f4e4e0d0d4d624d"
+  integrity sha512-enrjNgrlb7IVc8FTtE6LicR+tw+pmhKXljl67BJ+UYfPGqZtJWkLn5S5eV2Vh8affwLJvkKdRb1wilu4DG7YEQ==
 
 tsconfig-paths@^3.9.0:
   version "3.9.0"
