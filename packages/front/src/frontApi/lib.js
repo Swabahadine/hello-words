@@ -11,3 +11,5 @@ export const requestJson = (path, body = {}) => {
 };
 
 export const requestParamJson = (path, param, body) => requestJson(`${path}/${param}`, body);
+
+export const createBody = (data, method) => ({ data, method });
