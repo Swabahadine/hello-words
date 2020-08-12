@@ -2,6 +2,7 @@ const express = require('express');
 const { validator, wrapAsync: wa } = require('express-server-app');
 const { notFound, unauthorized } = require('@hapi/boom');
 const handleWordService = require('../service/handleWord');
+const GroupServices = require('../service/Group');
 
 const defaultUrls = [
 	'https://medium.com/@patarkf/synchronize-your-asynchronous-code-using-javascripts-async-await-5f3fa5b1366d',
@@ -20,8 +21,8 @@ const router = express.Router();
 router.get('/:category',
 	wa(async (req, res) => {
 		const { category } = req.params;
-		const resp = await handleWordService.fetchTextFromUrl(urls, category);
-		res.json(resp);
+		const groupWords = await GroupServices.findByCategory(category);
+		res.json(groupWords);
 	}));
 
 router.post('/',
