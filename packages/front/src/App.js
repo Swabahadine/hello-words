@@ -1,7 +1,14 @@
-import React from 'react';
+/* eslint-disable no-extra-boolean-cast */
+import React, { useState, useCallback, useEffect } from 'react';
 import { useQuery } from 'react-query';
 
+import {
+	Container, Row, Col, Button,
+} from 'reactstrap';
+import clsx from 'clsx';
 import { wordByCategory, createCategory } from './frontApi/groupApi';
+
+import { randInt } from './utils';
 
 const defaultUrls = [
 	'https://medium.com/@patarkf/synchronize-your-asynchronous-code-using-javascripts-async-await-5f3fa5b1366d',
@@ -15,24 +22,43 @@ const defaultUrls = [
 	'https://seranking.com/blog/find-all-pages-on-a-website/',
 ];
 
+const FLEX_CENTER = 'd-flex justify-content-center align-items-center';
+
 export default function App() {
+	const [word, setWord] = useState('welcome');
+	const [listWords, setListWords] = useState([]);
+
 	const { isLoading, error, data } = useQuery('wordByCategory', wordByCategory('informatique'));
 	//const { isLoading, error, data } = useQuery('createCategory', createCategory('informatique', defaultUrls));
-
+	useEffect(() => {
+		if (!!data) {
+			setListWords(data.words);
+		}
+	}, [data]);
+	const handleChangeWord = useCallback(() => {
+		const index = randInt(listWords.filter(({ weight }) => weight > 5 && weight < 30).length);
+		console.log(listWords.filter(({ weight }) => weight > 5).length);
+		setWord(listWords[index].name);
+	}, [listWords]);
 	if (isLoading) return 'Loading...';
-
+	console.log(listWords);
 	if (error) return `An error has occurred: ${error.message}`;
 
 	return (
-		<div>
-			<h1>Hello Words</h1>
-			<ul>
-				{data.words.map(({ name, weight }) => (
-					<li key={name}>
-						{`${name} ${weight}`}
-					</li>
-				))}
-			</ul>
-		</div>
+		<section className="vh-100">
+			<Container className={clsx(FLEX_CENTER, 'h-100')}>
+				<Row className={clsx(FLEX_CENTER, 'flex-column h-100')}>
+					<Col className={clsx(FLEX_CENTER, 'flex-column h-100')}>
+						<h1>Hello Words</h1>
+						<span className="py-4">
+							{word}
+						</span>
+						<Button color="info" onClick={handleChangeWord}>
+							New word
+						</Button>
+					</Col>
+				</Row>
+			</Container>
+		</section>
 	);
 }
