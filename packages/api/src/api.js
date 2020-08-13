@@ -1,11 +1,12 @@
 const { config } = require('express-server-app');
 const express = require('express');
 
-const groupRoute = require('./routes/group');
+const { groupRoute, translateRoute } = require('./routes');
 
 const api = express.Router();
 
 api.use('/groups', groupRoute);
+api.use('/translates', translateRoute);
 
 api.use((req, res, next) => {
 	res.header('X-Robots-Tag', 'none');
