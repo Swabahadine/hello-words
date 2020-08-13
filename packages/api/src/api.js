@@ -1,12 +1,16 @@
-const { config } = require('express-server-app');
+const { config, log } = require('express-server-app');
 const express = require('express');
 
-const { groupRoute, translateRoute } = require('./routes');
+const allRoutes = require('./routes');
 
 const api = express.Router();
+const logger = log();
 
-api.use('/groups', groupRoute);
-api.use('/translates', translateRoute);
+const urls = Object.keys(allRoutes);
+logger.info(`Liste des routes:${urls.map((url) => ` /${url}`)}`);
+urls.forEach((url) => {
+	api.use(`/${url}`, allRoutes[url]);
+});
 
 api.use((req, res, next) => {
 	res.header('X-Robots-Tag', 'none');

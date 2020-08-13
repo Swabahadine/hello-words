@@ -1,7 +1,7 @@
-const groupRoute = require('./group');
-const translateRoute = require('./translate');
+const groups = require('./group');
+const translates = require('./translate');
 
 module.exports = {
-	groupRoute,
-	translateRoute,
+	groups,
+	translates,
 };
