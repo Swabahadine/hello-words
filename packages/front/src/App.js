@@ -3,7 +3,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { useQuery, useMutation } from 'react-query';
 
 import {
-	Container, Row, Col, Button,
+	Container, Row, Col, Button, Alert,
 } from 'reactstrap';
 import clsx from 'clsx';
 import {
@@ -40,13 +40,40 @@ const convertToSentence = (words) => {
 
 const convertToArray = (words) => words.split(SEPARATOR);
 
+const generateUniqueNum = (exceptNums, maxNum) => {
+	const current = randInt(maxNum);
+	if (exceptNums.includes(current)) return generateUniqueNum(exceptNums, maxNum);
+	return current;
+};
+
+const generateMultiUniqueNum = (number, maxNum) => {
+	const uniqueNums = [];
+	for (let i = 0; i < number; i += 1) {
+		const num = generateUniqueNum(uniqueNums, maxNum);
+		uniqueNums.push(num);
+	}
+	return uniqueNums;
+};
+
+const shuffleArray = (array) => {
+	const res = [...array];
+	for (let i = res.length - 1; i > 0; i -= 1) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[res[i], res[j]] = [res[j], res[i]];
+	}
+	return res;
+};
+
 export default function App() {
 	const [word, setWord] = useState({
-		en: 'welcome',
-		fr: 'bienvenue',
+		focusWord: 'welcome',
+		focusIndex: 0,
 	});
 	const [listWords, setListWords] = useState([]);
 	const [listWordsTranslated, setListWordsTranslated] = useState([]);
+	const [score, setScore] = useState(0);
+	const [answer, setAnswer] = useState(null);
+
 	const [mutate, infoTranslate] = useMutation(translateTofrench);
 
 	const { isLoading, error, data } = useQuery('wordByCategory', wordByCategory('informatique'));
@@ -73,27 +100,77 @@ export default function App() {
 	}, [data, mutate]);
 
 	const handleChangeWord = useCallback(async () => {
-		const index = randInt(listWords.length);
+		const indexWords = generateMultiUniqueNum(16, listWords.length);
+		const index = indexWords[0];
 		const wordSelected = listWords[index].name;
-		const translateWordSelected = listWordsTranslated[index];
-		setWord({ en: wordSelected, fr: translateWordSelected });
-	}, [listWords, listWordsTranslated]);
+		setWord({ focusWord: wordSelected, focusIndex: index, indexsChoice: indexWords });
+	}, [listWords]);
 
 	if (isLoading) return 'Loading...';
 	if (error) return `An error has occurred: ${error.message}`;
 
 	return (
 		<section className="vh-100">
-			<Container className={clsx(FLEX_CENTER, 'h-100')}>
-				<Row className={clsx(FLEX_CENTER, 'flex-column h-100')}>
-					<Col className={clsx(FLEX_CENTER, 'flex-column h-100')}>
+			<Container className={clsx(FLEX_CENTER, 'flex-column h-100')}>
+				<Row className={clsx(FLEX_CENTER, 'flex-column')}>
+					<Col className={clsx(FLEX_CENTER, 'flex-column')}>
 						<h1>Hello Words</h1>
 						<span className="py-4">
-							{word.en} -&gt; {word.fr}
+							{word.focusWord}
 						</span>
-						<Button color="info" onClick={handleChangeWord}>
-							New word
-						</Button>
+					</Col>
+				</Row>
+				<Row className={clsx(FLEX_CENTER, '')}>
+					{word.indexsChoice ? shuffleArray(word.indexsChoice).map((index) => (
+						<Col key={index} xs="6" md="4" lg="3" className={clsx(FLEX_CENTER, 'flex-column')}>
+							<Button
+								color="link"
+								onClick={
+									() => {
+										if (index === word.focusIndex) {
+											setScore((prev) => prev + 1);
+											setAnswer({ isGood: true, index: word.focusIndex });
+										} else {
+											setAnswer({ isGood: false, index: word.focusIndex });
+										}
+										handleChangeWord();
+									}
+								}
+							>
+								{listWordsTranslated[index]}
+							</Button>
+						</Col>
+					)) : (
+						<Col>
+							<Button color="info" onClick={handleChangeWord}>
+								Commencer
+							</Button>
+						</Col>
+					)}
+				</Row>
+				<Row>
+					<Col xs="12" className={clsx(FLEX_CENTER, 'flex-column')}>
+						<span className="py-4">
+							Ton score est : {score}
+						</span>
+					</Col>
+					<Col>
+						{ answer?.isGood && (
+							<Alert color="success">
+								<span>
+									Bonne réponse !
+								</span>
+							</Alert>
+						)}
+						{ answer?.isGood === false && (
+							<Alert color="danger">
+								<span>
+									Mauvaise réponse !<br />
+									La traduction de {listWords[answer.index].name}
+									est {listWordsTranslated[answer.index]}
+								</span>
+							</Alert>
+						)}
 					</Col>
 				</Row>
 			</Container>
