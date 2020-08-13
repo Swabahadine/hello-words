@@ -28,10 +28,25 @@ import { randInt } from './utils';
 
 const FLEX_CENTER = 'd-flex justify-content-center align-items-center';
 
+const SEPARATOR = '.\n ';
+
+const convertToSentence = (words) => {
+	let sentence = '';
+	words.forEach((w) => {
+		sentence += `${w}${SEPARATOR}`;
+	});
+	return sentence;
+};
+
+const convertToArray = (words) => words.split(SEPARATOR);
+
 export default function App() {
-	const [word, setWord] = useState('welcome');
-	const [translateWord, setTranslateWord] = useState('bienvenue');
+	const [word, setWord] = useState({
+		en: 'welcome',
+		fr: 'bienvenue',
+	});
 	const [listWords, setListWords] = useState([]);
+	const [listWordsTranslated, setListWordsTranslated] = useState([]);
 	const [mutate, infoTranslate] = useMutation(translateTofrench);
 
 	const { isLoading, error, data } = useQuery('wordByCategory', wordByCategory('informatique'));
@@ -42,24 +57,31 @@ export default function App() {
 	// } = useQuery('createCategory', createCategory('informatique', defaultUrls));
 
 	useEffect(() => {
-		if (infoTranslate?.data?.text) {
-			setTranslateWord(infoTranslate.data.text);
+		if (infoTranslate?.data?.text && listWordsTranslated.length === 0) {
+			const frenchText = infoTranslate.data.text;
+			setListWordsTranslated(convertToArray(frenchText));
 		}
-	}, [infoTranslate]);
+	}, [infoTranslate, listWordsTranslated]);
 
 	useEffect(() => {
 		if (!!data) {
-			setListWords(data.words);
+			const dataFiltered = data.words.filter(({ weight }) => weight > 5 && weight < 30);
+			const listWordsString = convertToSentence(dataFiltered.map(({ name }) => name));
+			mutate(listWordsString);
+			setListWords(dataFiltered);
 		}
-	}, [data]);
+	}, [data, mutate]);
+
 	const handleChangeWord = useCallback(async () => {
-		const index = randInt(listWords.filter(({ weight }) => weight > 5 && weight < 30).length);
+		const index = randInt(listWords.length);
 		const wordSelected = listWords[index].name;
-		await mutate(wordSelected);
-		setWord(wordSelected);
-	}, [listWords, mutate]);
+		const translateWordSelected = listWordsTranslated[index];
+		setWord({ en: wordSelected, fr: translateWordSelected });
+	}, [listWords, listWordsTranslated]);
+
 	if (isLoading) return 'Loading...';
 	if (error) return `An error has occurred: ${error.message}`;
+
 	return (
 		<section className="vh-100">
 			<Container className={clsx(FLEX_CENTER, 'h-100')}>
@@ -67,7 +89,7 @@ export default function App() {
 					<Col className={clsx(FLEX_CENTER, 'flex-column h-100')}>
 						<h1>Hello Words</h1>
 						<span className="py-4">
-							{word} -&gt; {translateWord}
+							{word.en} -&gt; {word.fr}
 						</span>
 						<Button color="info" onClick={handleChangeWord}>
 							New word
