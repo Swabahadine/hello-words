@@ -12,7 +12,15 @@ import {
 } from './frontApi/groupApi';
 import { translateTofrench } from './frontApi/translateApi';
 
-import { randInt } from './utils';
+import {
+	classNames,
+	convertToArray,
+	convertToSentence,
+	filterDataByLevel,
+	generateMultiUniqueNum,
+	shuffleArray,
+	SEPARATOR,
+} from './lib';
 
 // const defaultUrls = [
 // 	'https://medium.com/@patarkf/synchronize-your-asynchronous-code-using-javascripts-async-await-5f3fa5b1366d',
@@ -26,43 +34,7 @@ import { randInt } from './utils';
 // 	'https://seranking.com/blog/find-all-pages-on-a-website/',
 // ];
 
-const FLEX_CENTER = 'd-flex justify-content-center align-items-center';
-
-const SEPARATOR = '.\n ';
-
-const convertToSentence = (words) => {
-	let sentence = '';
-	words.forEach((w) => {
-		sentence += `${w}${SEPARATOR}`;
-	});
-	return sentence;
-};
-
-const convertToArray = (words) => words.split(SEPARATOR);
-
-const generateUniqueNum = (exceptNums, maxNum) => {
-	const current = randInt(maxNum);
-	if (exceptNums.includes(current)) return generateUniqueNum(exceptNums, maxNum);
-	return current;
-};
-
-const generateMultiUniqueNum = (number, maxNum) => {
-	const uniqueNums = [];
-	for (let i = 0; i < number; i += 1) {
-		const num = generateUniqueNum(uniqueNums, maxNum);
-		uniqueNums.push(num);
-	}
-	return uniqueNums;
-};
-
-const shuffleArray = (array) => {
-	const res = [...array];
-	for (let i = res.length - 1; i > 0; i -= 1) {
-		const j = Math.floor(Math.random() * (i + 1));
-		[res[i], res[j]] = [res[j], res[i]];
-	}
-	return res;
-};
+const { FLEX_CENTER } = classNames;
 
 export default function App() {
 	const [word, setWord] = useState({
@@ -86,29 +58,33 @@ export default function App() {
 	useEffect(() => {
 		if (infoTranslate?.data?.text && listWordsTranslated.length === 0) {
 			const frenchText = infoTranslate.data.text;
-			setListWordsTranslated(convertToArray(frenchText));
+			setListWordsTranslated(convertToArray(frenchText, SEPARATOR));
 		}
 	}, [infoTranslate, listWordsTranslated]);
 
+	const level = 2;//parseInt(score / 10, 10) + 1;
 	useEffect(() => {
 		if (!!data) {
-			const dataFiltered = data.words.filter(({ weight }) => weight > 5 && weight < 30);
-			const listWordsString = convertToSentence(dataFiltered.map(({ name }) => name));
+			const dataFiltered = data.words.filter(filterDataByLevel(level)).slice(0, 500);
+			const listWordsString = convertToSentence(dataFiltered.map(({ name }) => name), SEPARATOR);
 			mutate(listWordsString);
 			setListWords(dataFiltered);
+			setListWordsTranslated([]);
 		}
-	}, [data, mutate]);
+	}, [data, level, mutate]);
 
 	const handleChangeWord = useCallback(async () => {
-		const indexWords = generateMultiUniqueNum(16, listWords.length);
+		const indexWords = generateMultiUniqueNum(8, listWords.length);
 		const index = indexWords[0];
+		shuffleArray(indexWords);
 		const wordSelected = listWords[index].name;
 		setWord({ focusWord: wordSelected, focusIndex: index, indexsChoice: indexWords });
 	}, [listWords]);
 
 	if (isLoading) return 'Loading...';
 	if (error) return `An error has occurred: ${error.message}`;
-
+	// console.log('listWords', listWords);
+	// console.log('tr', infoTranslate?.data?.text);
 	return (
 		<section className="vh-100">
 			<Container className={clsx(FLEX_CENTER, 'flex-column h-100')}>
@@ -121,7 +97,7 @@ export default function App() {
 					</Col>
 				</Row>
 				<Row className={clsx(FLEX_CENTER, '')}>
-					{word.indexsChoice ? shuffleArray(word.indexsChoice).map((index) => (
+					{word.indexsChoice ? word.indexsChoice.map((index) => (
 						<Col key={index} xs="6" md="4" lg="3" className={clsx(FLEX_CENTER, 'flex-column')}>
 							<Button
 								color="link"
@@ -166,7 +142,7 @@ export default function App() {
 							<Alert color="danger">
 								<span>
 									Mauvaise réponse !<br />
-									La traduction de {listWords[answer.index].name}
+									La traduction de {listWords[answer.index].name}{' '}
 									est {listWordsTranslated[answer.index]}
 								</span>
 							</Alert>
