@@ -1,0 +1,5 @@
+.FormSelect {
+	&__menu {
+		z-index: 2 !important; // fixes z-index issue with Button
+	}
+}
