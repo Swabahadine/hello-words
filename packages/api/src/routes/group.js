@@ -18,6 +18,12 @@ const GroupServices = require('../service/Group');
 
 const router = express.Router();
 
+router.get('/categories',
+	wa(async (req, res) => {
+		const categories = await GroupServices.findAllCategories();
+		res.json(categories);
+	}));
+
 router.get('/:category',
 	wa(async (req, res) => {
 		const { category } = req.params;

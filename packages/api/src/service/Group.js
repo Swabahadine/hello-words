@@ -4,4 +4,6 @@ exports.create = (category, data) => Group.create({ category, size: data.length,
 
 exports.findByCategory = (category) => Group.findOne({ category });
 
+exports.findAllCategories = () => Group.find({}, 'category');
+
 exports.findAll = (...args) => Group.find(...args);

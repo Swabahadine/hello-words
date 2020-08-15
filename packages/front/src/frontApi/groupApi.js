@@ -13,3 +13,8 @@ export const createCategory = (category, urls) => async () => {
 	const result = await requestJson(PATH, createBody(data, 'POST'));
 	return result.json();
 };
+
+export const findCategories = () => async () => {
+	const result = await requestJson(`${PATH}/categories`);
+	return result.json();
+};

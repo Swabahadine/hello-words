@@ -1,11 +1,14 @@
 /* eslint-disable no-extra-boolean-cast */
 import React, { useState, useCallback, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useQuery, useMutation } from 'react-query';
 
 import {
 	Container, Row, Col, Button, Alert,
 } from 'reactstrap';
 import clsx from 'clsx';
+
+import { LayoutLoading } from '../components/uikit';
 
 import {
 	wordByCategory,
@@ -37,7 +40,8 @@ import {
 
 const { FLEX_CENTER } = classNames;
 
-export default function Game() {
+export default function Game({ match }) {
+	const { category = 'informatique' } = match.params;
 	const [word, setWord] = useState({
 		focusWord: 'welcome',
 		focusIndex: 0,
@@ -49,7 +53,7 @@ export default function Game() {
 
 	const [mutate, infoTranslate] = useMutation(translateTofrench);
 
-	const { isLoading, error, data } = useQuery('wordByCategory', wordByCategory('informatique'));
+	const { isLoading, error, data } = useQuery('wordByCategory', wordByCategory(category));
 	// const {
 	// 	isLoading,
 	// 	error,
@@ -82,75 +86,84 @@ export default function Game() {
 		setWord({ focusWord: wordSelected, focusIndex: index, indexsChoice: indexWords });
 	}, [listWords]);
 
-	if (isLoading) return 'Loading...';
 	if (error) return `An error has occurred: ${error.message}`;
 	// console.log('listWords', listWords);
 	// console.log('tr', infoTranslate?.data?.text);
 	return (
-		<section className="h-100 w-100">
-			<Container className={clsx(FLEX_CENTER, 'flex-column h-100')}>
-				<Row className={clsx(FLEX_CENTER, 'flex-column')}>
-					<Col className={clsx(FLEX_CENTER, 'flex-column')}>
-						<h1>Hello Words</h1>
-						<span className="py-4">
-							{word.focusWord}
-						</span>
-					</Col>
-				</Row>
-				<Row className={clsx(FLEX_CENTER, '')}>
-					{word.indexsChoice ? word.indexsChoice.map((index) => (
-						<Col key={index} xs="6" md="4" lg="3" className={clsx(FLEX_CENTER, 'flex-column')}>
-							<Button
-								color="link"
-								onClick={
-									() => {
-										if (index === word.focusIndex) {
-											setScore((prev) => prev + 1);
-											setAnswer({ isGood: true, index: word.focusIndex });
-										} else {
-											setAnswer({ isGood: false, index: word.focusIndex });
+		<LayoutLoading loading={isLoading}>
+			<section className="vh-100 w-100">
+				<Container className={clsx(FLEX_CENTER, 'flex-column h-100')}>
+					<Row className={clsx(FLEX_CENTER, 'flex-column')}>
+						<Col className={clsx(FLEX_CENTER, 'flex-column')}>
+							<h1>Hello Words</h1>
+							<span className="py-4">
+								{word.focusWord}
+							</span>
+						</Col>
+					</Row>
+					<Row className={clsx(FLEX_CENTER, '')}>
+						{word.indexsChoice ? word.indexsChoice.map((index) => (
+							<Col key={index} xs="6" md="4" lg="3" className={clsx(FLEX_CENTER, 'flex-column')}>
+								<Button
+									color="link"
+									onClick={
+										() => {
+											if (index === word.focusIndex) {
+												setScore((prev) => prev + 1);
+												setAnswer({ isGood: true, index: word.focusIndex });
+											} else {
+												setAnswer({ isGood: false, index: word.focusIndex });
+											}
+											handleChangeWord();
 										}
-										handleChangeWord();
 									}
-								}
-							>
-								{listWordsTranslated[index]}
-							</Button>
+								>
+									{listWordsTranslated[index]}
+								</Button>
+							</Col>
+						)) : (
+							<Col>
+								<Button color="info" onClick={handleChangeWord}>
+									Commencer
+								</Button>
+							</Col>
+						)}
+					</Row>
+					<Row>
+						<Col xs="12" className={clsx(FLEX_CENTER, 'flex-column')}>
+							<span className="py-4">
+								Ton score est : {score}
+							</span>
 						</Col>
-					)) : (
 						<Col>
-							<Button color="info" onClick={handleChangeWord}>
-								Commencer
-							</Button>
+							{ answer?.isGood && (
+								<Alert color="success">
+									<span>
+										Bonne réponse !
+									</span>
+								</Alert>
+							)}
+							{ answer?.isGood === false && (
+								<Alert color="danger">
+									<span>
+										Mauvaise réponse !<br />
+										La traduction de {listWords[answer.index].name}{' '}
+										est {listWordsTranslated[answer.index]}
+									</span>
+								</Alert>
+							)}
 						</Col>
-					)}
-				</Row>
-				<Row>
-					<Col xs="12" className={clsx(FLEX_CENTER, 'flex-column')}>
-						<span className="py-4">
-							Ton score est : {score}
-						</span>
-					</Col>
-					<Col>
-						{ answer?.isGood && (
-							<Alert color="success">
-								<span>
-									Bonne réponse !
-								</span>
-							</Alert>
-						)}
-						{ answer?.isGood === false && (
-							<Alert color="danger">
-								<span>
-									Mauvaise réponse !<br />
-									La traduction de {listWords[answer.index].name}{' '}
-									est {listWordsTranslated[answer.index]}
-								</span>
-							</Alert>
-						)}
-					</Col>
-				</Row>
-			</Container>
-		</section>
+					</Row>
+				</Container>
+			</section>
+		</LayoutLoading>
 	);
 }
+
+Game.propTypes = {
+	match: PropTypes.shape({
+		params: PropTypes.shape({
+			category: PropTypes.string,
+		}),
+	}).isRequired,
+};

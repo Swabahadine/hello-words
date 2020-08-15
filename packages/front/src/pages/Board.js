@@ -7,20 +7,16 @@ import {
 } from 'reactstrap';
 import clsx from 'clsx';
 
+import { useHistory } from 'react-router-dom';
+import { LayoutLoading } from '../components/uikit';
+
 import {
-	wordByCategory,
+	findCategories,
 	// createCategory,
 } from '../frontApi/groupApi';
-import { translateTofrench } from '../frontApi/translateApi';
 
 import {
 	classNames,
-	convertToArray,
-	convertToSentence,
-	filterDataByLevel,
-	generateMultiUniqueNum,
-	shuffleArray,
-	SEPARATOR,
 } from '../lib';
 
 // const defaultUrls = [
@@ -38,64 +34,52 @@ import {
 const { FLEX_CENTER, FLEX_AROUND } = classNames;
 
 export default function Board() {
+	const history = useHistory();
+	const { isLoading, data } = useQuery('findCategories', findCategories());
+	const onChooseCategory = useCallback((category) => {
+		history.push(`game/${category}`);
+	}, [history]);
 	return (
-		<section className="h-100 w-100">
-			<Jumbotron fluid className={clsx(FLEX_AROUND)} style={{ }}>
-				<h1 className="display-3">Hello Words</h1>
-				<div>
-					<Button color="danger">
-						Creer une nouvelle categorie
-					</Button>
-				</div>
-			</Jumbotron>
-			<Container fluid className={clsx(FLEX_CENTER, 'flex-column h-100')}>
-				<Row className={clsx('flex-column w-100')}>
-					<Col xs="12" md="6" lg="12" className={clsx('flex-column')}>
-						<Button
-							color=""
-							className=""
-							block
-							style={{
-								height: 70,
-								borderRadius: 0,
-								textAlign: 'left',
-								borderBottomWidth: 2,
-								borderBottomColor: 'black',
-							}}
-						>
-							<h4><b>Informatique</b></h4>
+		<LayoutLoading loading={isLoading}>
+			<section style={{ overflowY: 'scroll' }} className="vh-100 w-100">
+				<Jumbotron fluid className={clsx(FLEX_AROUND)} style={{ }}>
+					<div>
+						<h1 className="display-3">
+							Hello Words
+						</h1>
+						<h5>Choisis une catégorie</h5>
+					</div>
+					<div>
+						<Button color="danger">
+							Creer une nouvelle categorie
 						</Button>
-						<Button
-							color=""
-							className=""
-							block
-							style={{
-								height: 70,
-								borderRadius: 0,
-								textAlign: 'left',
-								borderBottomWidth: 2,
-								borderBottomColor: 'black',
-							}}
-						>
-							<h4><b>Entretien technique</b></h4>
-						</Button>
-						<Button
-							color=""
-							className=""
-							block
-							style={{
-								height: 70,
-								borderRadius: 0,
-								textAlign: 'left',
-								borderBottomWidth: 2,
-								borderBottomColor: 'black',
-							}}
-						>
-							<h4><b>Bussiness</b></h4>
-						</Button>
-					</Col>
-				</Row>
-			</Container>
-		</section>
+					</div>
+				</Jumbotron>
+				<Container fluid className={clsx('flex-column h-100')}>
+					<Row className={clsx(FLEX_CENTER, 'w-100')}>
+						<Col xs="12" md="6" lg="10" className={clsx('flex-column')}>
+							{data?.map(({ _id, category }) => (
+								<Button
+									onClick={() => onChooseCategory(category)}
+									key={_id}
+									color=""
+									className=""
+									block
+									style={{
+										height: 70,
+										borderRadius: 0,
+										textAlign: 'left',
+										borderBottomWidth: 2,
+										borderBottomColor: 'black',
+									}}
+								>
+									<h4><b>{category}</b></h4>
+								</Button>
+							))}
+						</Col>
+					</Row>
+				</Container>
+			</section>
+		</LayoutLoading>
 	);
 }

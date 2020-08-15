@@ -1,5 +1,6 @@
 export { default as LayoutContent } from './Content';
 export { default as LayoutLeftSidebar } from './LeftSidebar';
+export { default as LayoutLoading } from './LayoutLoading';
 export { default as LayoutMain } from './Main';
 export { default as LayoutMinimal } from './Minimal';
 export { default as LayoutNoSideBar } from './NoSideBar';
