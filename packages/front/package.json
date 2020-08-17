@@ -17,6 +17,7 @@
     "memoize-one": "^5.1.1",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
+    "react-async-hook": "^3.6.1",
     "react-dom": "^16.13.1",
     "react-jsonschema-form-validation": "^0.5.6",
     "react-metismenu": "^1.4.0",

@@ -10,17 +10,26 @@ import LayoutSidebar from './components/LeftSidebar';
 
 import PageBoard from './pages/Board';
 import PageGame from './pages/Game';
+import PageSource from './pages/Source';
 
+const pathPage = (path, page) => ({ path, page });
+
+const routerData = [
+	pathPage('/board', PageBoard),
+	pathPage('/game/:category', PageGame),
+	pathPage('/sources/:category', PageSource),
+];
 const Routes = () => (
 	<HashRouter>
 		<Suspense fallback={<h1>Load ...</h1>}>
 			<Switch>
 				<Redirect exact from="/" to="/board" />
-				<Route path={['/board', '/game/:category']}>
+				<Route path={routerData.map(({ path }) => path)}>
 					<LayoutSidebar>
 						<Switch>
-							<Route path="/board" component={PageBoard} />
-							<Route path="/game/:category" component={PageGame} />
+							{routerData.map(({ path, page }) => (
+								<Route key={path} path={path} component={page} />
+							))}
 						</Switch>
 					</LayoutSidebar>
 				</Route>

@@ -8,8 +8,8 @@ export const wordByCategory = (category) => async () => {
 	return result.json();
 };
 
-export const createCategory = (category, urls) => async () => {
-	const data = { category, urls };
+export const createCategory = (data) => async () => {
+	console.log('data', data);
 	const result = await requestJson(PATH, createBody(data, 'POST'));
 	return result.json();
 };

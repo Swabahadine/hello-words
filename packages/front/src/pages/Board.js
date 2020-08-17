@@ -36,8 +36,13 @@ const { FLEX_CENTER, FLEX_AROUND } = classNames;
 export default function Board() {
 	const history = useHistory();
 	const { isLoading, data } = useQuery('findCategories', findCategories());
+
 	const onChooseCategory = useCallback((category) => {
 		history.push(`game/${category}`);
+	}, [history]);
+
+	const onCreateCategory = useCallback((category = 'add') => {
+		history.push(`sources/${category}`);
 	}, [history]);
 	return (
 		<LayoutLoading loading={isLoading}>
@@ -50,7 +55,7 @@ export default function Board() {
 						<h5>Choisis une catégorie</h5>
 					</div>
 					<div>
-						<Button color="danger">
+						<Button color="danger" onClick={() => onCreateCategory()}>
 							Creer une nouvelle categorie
 						</Button>
 					</div>
