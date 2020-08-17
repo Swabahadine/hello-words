@@ -3,6 +3,7 @@ const { validator, wrapAsync: wa } = require('express-server-app');
 
 const handleWordService = require('../service/handleWord');
 const GroupServices = require('../service/Group');
+const SourceServices = require('../service/Source');
 
 // const defaultUrls = [
 // 	'https://medium.com/@patarkf/synchronize-your-asynchronous-code-using-javascripts-async-await-5f3fa5b1366d',
@@ -46,7 +47,9 @@ router.post('/',
 	}),
 	wa(async (req, res) => {
 		const { category, urls } = req.body;
-		const resp = await handleWordService.fetchTextFromUrl(urls, category);
+		const { results, infoGroup } = await handleWordService.fetchTextFromUrl(urls, category);
+		const resp = await GroupServices.create(category, results);
+		await SourceServices.create(req.body, resp._id, infoGroup);
 		res.json(resp);
 	}));
 

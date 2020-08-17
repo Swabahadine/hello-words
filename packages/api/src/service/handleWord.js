@@ -2,8 +2,6 @@ const natural = require('natural');
 const axios = require('axios');
 const { parse } = require('node-html-parser');
 
-const GroupServices = require('./Group');
-
 // const wordnet = new natural.WordNet();
 
 // const wordInterpret = (word) => new Promise((resolve) => {
@@ -16,7 +14,7 @@ const GroupServices = require('./Group');
 
 const tokenizer = new natural.OrthographyTokenizer({ langage: 'en' });
 
-module.exports.fetchTextFromUrl = async (urls, category) => {
+module.exports.fetchTextFromUrl = async (urls) => {
 	const data = {};
 	let rootTok = [];
 	await Promise.all(urls.map(async (url) => {
@@ -45,5 +43,12 @@ module.exports.fetchTextFromUrl = async (urls, category) => {
 			resData[w] = data[w];
 			return { name: w, weight: data[w] };
 		});
-	return GroupServices.create(category, results);
+	const infoGroup = {
+		textSize: rootTok.length,
+		diffWords: results.length,
+	};
+	return {
+		results,
+		infoGroup,
+	};
 };

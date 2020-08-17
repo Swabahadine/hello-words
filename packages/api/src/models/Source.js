@@ -1,0 +1,24 @@
+const mongoose = require('mongoose');
+
+const editable = {
+	createdAt: { type: Date, required: true, default: new Date().toISOString() },
+	updatedAt: { type: Date, required: true, default: new Date().toISOString() },
+};
+
+const sourceSchema = new mongoose.Schema({
+	...editable,
+	category: { type: String, required: true },
+	urls: [{ type: String }],
+	text: { type: String },
+	group: { type: mongoose.Schema.Types.ObjectId, ref: 'Group' },
+	infos: {
+		textSize: { type: Number },
+		diffWords: { type: Number },
+	},
+});
+
+sourceSchema.pre('save', async function preSave() {
+	this.updatedAt = new Date().toISOString();
+});
+
+module.exports = mongoose.model('source', sourceSchema);
