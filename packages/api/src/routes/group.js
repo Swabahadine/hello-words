@@ -21,7 +21,7 @@ const router = express.Router();
 
 router.get('/categories',
 	wa(async (req, res) => {
-		const categories = await GroupServices.findAllCategories();
+		const categories = await SourceServices.findAll();
 		res.json(categories);
 	}));
 
