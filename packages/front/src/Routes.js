@@ -17,9 +17,9 @@ const pathPage = (path, page) => ({ path, page });
 
 const routerData = [
 	pathPage('/board', PageBoard),
-	pathPage('/game/:category', PageGame),
+	pathPage('/game/:idGroup', PageGame),
 	pathPage('/sources/create', PageSource),
-	pathPage('/sources/edit/:id', PageSourceEdit),
+	pathPage('/sources/edit/:idSource', PageSourceEdit),
 ];
 const Routes = () => (
 	<HashRouter>

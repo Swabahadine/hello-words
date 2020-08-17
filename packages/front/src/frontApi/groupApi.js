@@ -3,8 +3,8 @@ import { requestParamJson, requestJson, createBody } from './lib';
 
 const PATH = 'groups';
 
-export const wordByCategory = (category) => async () => {
-	const result = await requestParamJson(PATH, category);
+export const wordById = (id) => async () => {
+	const result = await requestParamJson(PATH, id);
 	return result.json();
 };
 

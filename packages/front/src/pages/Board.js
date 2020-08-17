@@ -37,8 +37,8 @@ export default function Board() {
 	const history = useHistory();
 	const { isLoading, data } = useQuery('findCategories', findCategories());
 
-	const onChooseCategory = useCallback((category) => {
-		history.push(`game/${category}`);
+	const onChooseCategory = useCallback((idGroup) => {
+		history.push(`game/${idGroup}`);
 	}, [history]);
 
 	const onCreateCategory = useCallback(() => {
@@ -66,7 +66,12 @@ export default function Board() {
 				</Jumbotron>
 				<Container fluid className={clsx('flex-column h-100')}>
 					<Row className={clsx(FLEX_CENTER, 'w-100')}>
-						{data?.map(({ _id, category, infos = {} }) => (
+						{data?.map(({
+							_id,
+							category,
+							infos = {},
+							group,
+						}) => (
 							<Col key={_id} xs="12" md="6" lg="4" className={clsx('flex-column py-2')}>
 								<Card>
 									<CardHeader className={clsx(FLEX_BETWEEN)}>
@@ -81,7 +86,7 @@ export default function Board() {
 									</CardBody>
 									<CardFooter>
 										<Button
-											onClick={() => onChooseCategory(category)}
+											onClick={() => onChooseCategory(group)}
 											key={_id}
 											color="info"
 											className=""

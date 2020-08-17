@@ -11,7 +11,7 @@ import clsx from 'clsx';
 import { LayoutLoading } from '../components/uikit';
 
 import {
-	wordByCategory,
+	wordById,
 	// createCategory,
 } from '../frontApi/groupApi';
 import { translateTofrench } from '../frontApi/translateApi';
@@ -41,7 +41,7 @@ import {
 const { FLEX_CENTER } = classNames;
 
 export default function Game({ match }) {
-	const { category = 'informatique' } = match.params;
+	const { idGroup } = match.params;
 	const [word, setWord] = useState({
 		focusWord: 'welcome',
 		focusIndex: 0,
@@ -53,7 +53,7 @@ export default function Game({ match }) {
 
 	const [mutate, infoTranslate] = useMutation(translateTofrench);
 
-	const { isLoading, error, data } = useQuery('wordByCategory', wordByCategory(category));
+	const { isLoading, error, data } = useQuery('wordByCategory', wordById(idGroup));
 	// const {
 	// 	isLoading,
 	// 	error,
@@ -163,7 +163,7 @@ export default function Game({ match }) {
 Game.propTypes = {
 	match: PropTypes.shape({
 		params: PropTypes.shape({
-			category: PropTypes.string,
+			idGroup: PropTypes.string,
 		}),
 	}).isRequired,
 };

@@ -63,8 +63,8 @@ const initialState = {
 };
 
 export default function SourceEdit({ match }) {
-	const { id: idCategory } = match.params;
-	const { isLoading: load, data } = useQuery('findCategoryById', findCategoryById(idCategory));
+	const { idSource } = match.params;
+	const { isLoading: load, data } = useQuery('findCategoryById', findCategoryById(idSource));
 	const history = useHistory();
 
 	const [formData, setFormData] = useState(initialState);
@@ -78,7 +78,7 @@ export default function SourceEdit({ match }) {
 		// isError,
 		isLoading,
 		// isSuccess,
-	}] = useMutation(updateCategory({ ...formData, id: idCategory }));
+	}] = useMutation(updateCategory({ ...formData, id: idSource }));
 
 	const handleChange = useCallback((newData) => {
 		setFormData(newData);
@@ -214,7 +214,7 @@ export default function SourceEdit({ match }) {
 SourceEdit.propTypes = {
 	match: PropTypes.shape({
 		params: PropTypes.shape({
-			id: PropTypes.string,
+			idSource: PropTypes.string,
 		}),
 	}).isRequired,
 };

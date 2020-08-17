@@ -25,10 +25,10 @@ router.get('/categories',
 		res.json(categories);
 	}));
 
-router.get('/:category',
+router.get('/:id',
 	wa(async (req, res) => {
-		const { category } = req.params;
-		const groupWords = await GroupServices.findByCategory(category);
+		const { id } = req.params;
+		const groupWords = await GroupServices.findById(id);
 		res.json(groupWords);
 	}));
 
