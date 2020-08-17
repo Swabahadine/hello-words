@@ -1,9 +1,9 @@
 /* eslint-disable no-extra-boolean-cast */
-import React, { useState, useCallback, useEffect } from 'react';
-import { useQuery, useMutation } from 'react-query';
+import React, { useCallback } from 'react';
+import { useQuery } from 'react-query';
 
 import {
-	Container, Row, Col, Button, ListGroup, Jumbotron, Card, ListGroupItem,
+	Container, Row, Col, Button, Jumbotron, Card, CardHeader, CardBody, CardFooter,
 } from 'reactstrap';
 import clsx from 'clsx';
 
@@ -13,7 +13,7 @@ import { LayoutLoading } from '../components/uikit';
 import {
 	findCategories,
 	// createCategory,
-} from '../frontApi/groupApi';
+} from '../frontApi/sourcesApi';
 
 import {
 	classNames,
@@ -31,7 +31,7 @@ import {
 // 	'https://seranking.com/blog/find-all-pages-on-a-website/',
 // ];
 
-const { FLEX_CENTER, FLEX_AROUND } = classNames;
+const { FLEX_CENTER, FLEX_AROUND, FLEX_BETWEEN } = classNames;
 
 export default function Board() {
 	const history = useHistory();
@@ -41,8 +41,12 @@ export default function Board() {
 		history.push(`game/${category}`);
 	}, [history]);
 
-	const onCreateCategory = useCallback((category = 'add') => {
-		history.push(`sources/${category}`);
+	const onCreateCategory = useCallback(() => {
+		history.push('sources/create');
+	}, [history]);
+
+	const onEditCategory = useCallback((id) => {
+		history.push(`sources/edit/${id}`);
 	}, [history]);
 	return (
 		<LayoutLoading loading={isLoading}>
@@ -62,26 +66,49 @@ export default function Board() {
 				</Jumbotron>
 				<Container fluid className={clsx('flex-column h-100')}>
 					<Row className={clsx(FLEX_CENTER, 'w-100')}>
-						<Col xs="12" md="6" lg="10" className={clsx('flex-column')}>
-							{data?.map(({ _id, category }) => (
-								<Button
-									onClick={() => onChooseCategory(category)}
-									key={_id}
-									color=""
-									className=""
-									block
-									style={{
-										height: 70,
-										borderRadius: 0,
-										textAlign: 'left',
-										borderBottomWidth: 2,
-										borderBottomColor: 'black',
-									}}
-								>
-									<h4><b>{category}</b></h4>
-								</Button>
-							))}
-						</Col>
+						{data?.map(({ _id, category, infos = {} }) => (
+							<Col key={_id} xs="12" md="6" lg="4" className={clsx('flex-column py-2')}>
+								<Card>
+									<CardHeader className={clsx(FLEX_BETWEEN)}>
+										<b>{category}</b>
+										<Button onClick={() => onEditCategory(_id)} color="link">
+											Modifier
+										</Button>
+									</CardHeader>
+									<CardBody>
+										<b>{infos.diffWords}</b> mots différents sur un total de {infos.textSize}
+										{' '}mots provenant des sources.
+									</CardBody>
+									<CardFooter>
+										<Button
+											onClick={() => onChooseCategory(category)}
+											key={_id}
+											color="info"
+											className=""
+										>
+											Jouer
+										</Button>
+									</CardFooter>
+								</Card>
+							</Col>
+							// <Button
+							// 	onClick={() => onChooseCategory(category)}
+							// 	key={_id}
+							// 	color=""
+							// 	className=""
+							// 	block
+							// 	style={{
+							// 		height: 70,
+							// 		borderRadius: 0,
+							// 		textAlign: 'left',
+							// 		borderBottomWidth: 2,
+							// 		borderBottomColor: 'black',
+							// 	}}
+							// >
+							// 	<h4><b>{category}</b></h4>
+							// </Button>
+						))}
+
 					</Row>
 				</Container>
 			</section>

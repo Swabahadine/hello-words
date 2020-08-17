@@ -1,7 +1,8 @@
 /* eslint-disable no-extra-boolean-cast */
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useAsyncCallback } from 'react-async-hook';
-import { useMutation } from 'react-query';
+import { useQuery, useMutation } from 'react-query';
 
 import {
 	Container, Row, Col, Button, Jumbotron, FormGroup, Input,
@@ -15,8 +16,8 @@ import {
 } from '../components/uikit';
 
 import {
-	// findCategories,
-	createCategory,
+	findCategoryById,
+	updateCategory,
 } from '../frontApi/sourcesApi';
 
 import {
@@ -61,15 +62,23 @@ const initialState = {
 	category: '',
 };
 
-export default function Source() {
+export default function SourceEdit({ match }) {
+	const { id: idCategory } = match.params;
+	const { isLoading: load, data } = useQuery('findCategoryById', findCategoryById(idCategory));
 	const history = useHistory();
 
 	const [formData, setFormData] = useState(initialState);
+	useEffect(() => {
+		if (data) {
+			const { urls, category } = data;
+			setFormData({ urls, category });
+		}
+	}, [data]);
 	const [mutate, {
 		// isError,
 		isLoading,
 		// isSuccess,
-	}] = useMutation(createCategory(formData));
+	}] = useMutation(updateCategory({ ...formData, id: idCategory }));
 
 	const handleChange = useCallback((newData) => {
 		setFormData(newData);
@@ -110,7 +119,7 @@ export default function Source() {
 			onSubmit={handleSubmitAsync.execute}
 			schema={schema}
 		>
-			<LayoutLoading loading={false}>
+			<LayoutLoading loading={load}>
 				<section style={{ overflowY: 'scroll' }} className="vh-100 vw-100">
 					<Jumbotron fluid className={clsx(FLEX_AROUND)} style={{ }}>
 						<div>
@@ -134,7 +143,7 @@ export default function Source() {
 											right: 30,
 										}}
 									>
-										<span className="text-white d-xl-block">Enregistrer</span>
+										<span className="text-white d-xl-block">Mettre à jour</span>
 									</ButtonLoading>
 								</div>
 								<ContentTitle title="Nom de la catégorie *">
@@ -201,3 +210,11 @@ export default function Source() {
 		</Form>
 	);
 }
+
+SourceEdit.propTypes = {
+	match: PropTypes.shape({
+		params: PropTypes.shape({
+			id: PropTypes.string,
+		}),
+	}).isRequired,
+};

@@ -11,13 +11,15 @@ import LayoutSidebar from './components/LeftSidebar';
 import PageBoard from './pages/Board';
 import PageGame from './pages/Game';
 import PageSource from './pages/Source';
+import PageSourceEdit from './pages/SourceEdit';
 
 const pathPage = (path, page) => ({ path, page });
 
 const routerData = [
 	pathPage('/board', PageBoard),
 	pathPage('/game/:category', PageGame),
-	pathPage('/sources/:category', PageSource),
+	pathPage('/sources/create', PageSource),
+	pathPage('/sources/edit/:id', PageSourceEdit),
 ];
 const Routes = () => (
 	<HashRouter>
