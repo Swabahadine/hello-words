@@ -29,3 +29,5 @@ exports.update = async (_id, data, infos) => {
 	const res = await Source.updateOne({ _id }, { $set: props });
 	return res;
 };
+
+exports.delete = (id) => Source.deleteOne({ _id: id });

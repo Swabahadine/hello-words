@@ -18,6 +18,11 @@ export const updateCategory = (data) => async () => {
 	return result.json();
 };
 
+export const deleteCategory = async (data) => {
+	const result = await requestJson(PATH, createBody(data, 'DELETE'));
+	return result.json();
+};
+
 export const findCategoryById = (id) => async () => {
 	const result = await requestParamJson(PATH, id);
 	return result.json();

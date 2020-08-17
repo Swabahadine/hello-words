@@ -19,6 +19,30 @@ const SourceServices = require('../service/Source');
 // ];
 
 const router = express.Router();
+router.delete('/',
+	validator().validate({
+		body: {
+			type: 'object',
+			additionalProperties: false,
+			properties: {
+				id: { type: 'string' },
+			},
+			required: ['id'],
+
+		},
+	}),
+	wa(async (req, res) => {
+		const { id } = req.body;
+		const sources = await SourceServices.findById(id);
+		if (!sources) throw notFound(`Cette catégorie: ${id} n'a pas été trouvée`);
+
+		const group = GroupServices.findById(sources.group);
+		if (!group) throw notFound(`Ce group: ${sources.group} n'a pas été trouvée`);
+
+		await SourceServices.delete(id);
+		const resp = await GroupServices.delete(sources.group);
+		res.json(resp);
+	}));
 
 router.get('/categories',
 	wa(async (req, res) => {

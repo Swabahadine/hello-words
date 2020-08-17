@@ -1,6 +1,6 @@
 /* eslint-disable no-extra-boolean-cast */
 import React, { useCallback } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery, useMutation } from 'react-query';
 
 import {
 	Container, Row, Col, Button, Jumbotron, Card, CardHeader, CardBody, CardFooter,
@@ -12,7 +12,7 @@ import { LayoutLoading } from '../components/uikit';
 
 import {
 	findCategories,
-	// createCategory,
+	deleteCategory,
 } from '../frontApi/sourcesApi';
 
 import {
@@ -35,7 +35,12 @@ const { FLEX_CENTER, FLEX_AROUND, FLEX_BETWEEN } = classNames;
 
 export default function Board() {
 	const history = useHistory();
-	const { isLoading, data } = useQuery('findCategories', findCategories());
+	const { isLoading, data, refetch } = useQuery('findCategories', findCategories());
+	const [mutate, {
+		// isError,
+		isLoading: isLoadingMutate,
+		// isSuccess,
+	}] = useMutation((body) => deleteCategory(body));
 
 	const onChooseCategory = useCallback((idGroup) => {
 		history.push(`game/${idGroup}`);
@@ -48,8 +53,13 @@ export default function Board() {
 	const onEditCategory = useCallback((id) => {
 		history.push(`sources/edit/${id}`);
 	}, [history]);
+
+	const onDeleteCategory = useCallback(async (id) => {
+		await mutate({ id });
+		refetch();
+	}, [mutate, refetch]);
 	return (
-		<LayoutLoading loading={isLoading}>
+		<LayoutLoading loading={isLoading || isLoadingMutate || !data}>
 			<section style={{ overflowY: 'scroll' }} className="vh-100 w-100">
 				<Jumbotron fluid className={clsx(FLEX_AROUND)} style={{ }}>
 					<div>
@@ -76,12 +86,17 @@ export default function Board() {
 								<Card>
 									<CardHeader className={clsx(FLEX_BETWEEN)}>
 										<b>{category}</b>
-										<Button onClick={() => onEditCategory(_id)} color="link">
-											Modifier
-										</Button>
+										<div>
+											<Button onClick={() => onEditCategory(_id)} color="link">
+												Modifier
+											</Button>
+											<Button onClick={() => onDeleteCategory(_id)} color="link">
+												Supprimer
+											</Button>
+										</div>
 									</CardHeader>
 									<CardBody>
-										<b>{infos.diffWords}</b> mots différents sur un total de {infos.textSize}
+										<b>{infos.diffWords}</b> mots différents sur un total de <b>{infos.textSize}</b>
 										{' '}mots provenant des sources.
 									</CardBody>
 									<CardFooter>
@@ -96,22 +111,6 @@ export default function Board() {
 									</CardFooter>
 								</Card>
 							</Col>
-							// <Button
-							// 	onClick={() => onChooseCategory(category)}
-							// 	key={_id}
-							// 	color=""
-							// 	className=""
-							// 	block
-							// 	style={{
-							// 		height: 70,
-							// 		borderRadius: 0,
-							// 		textAlign: 'left',
-							// 		borderBottomWidth: 2,
-							// 		borderBottomColor: 'black',
-							// 	}}
-							// >
-							// 	<h4><b>{category}</b></h4>
-							// </Button>
 						))}
 
 					</Row>

@@ -29,3 +29,5 @@ exports.update = async (_id, category, data) => {
 	};
 	return Group.updateOne({ _id }, { $set: props });
 };
+
+exports.delete = (id) => Group.deleteOne({ _id: id });
