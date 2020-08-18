@@ -18230,6 +18230,24 @@ windows-release@^3.1.0:
   dependencies:
     execa "^1.0.0"
 
+wink-lemmatizer@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/wink-lemmatizer/-/wink-lemmatizer-3.0.1.tgz#d0d65c87d1dbc322af7599489bb23c0490f9bcf0"
+  integrity sha512-i3UFptXN8zqRaum4CWBGAXkpK6gtPU9a0/M5U9t2epBd68sr9WX7mFWKfMuSAJoc9w0HXHZOXsuGvTRxjCSWPQ==
+  dependencies:
+    wink-lexicon "^2.0.1"
+    wink-porter2-stemmer "^2.0.0"
+
+wink-lexicon@^2.0.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/wink-lexicon/-/wink-lexicon-2.1.1.tgz#2966ceceaabb343cae7803441384ad28ddfe9a72"
+  integrity sha512-By1dTZdq0dhHNJlFHjwvOV9tWeijS7T119gt7/JA59W6uVdRdvZ7Yz10TrIbqt70A3ew1ywDvhYwCYc4VuJ7XA==
+
+wink-porter2-stemmer@^2.0.0:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/wink-porter2-stemmer/-/wink-porter2-stemmer-2.0.1.tgz#f7680e584e2b9b4c44766642325671662e98f44a"
+  integrity sha512-0g+RkkqhRXFmSpJQStVXW5N/WsshWpJXsoDRW7DwVkGI2uDT6IBCoq3xdH5p6IHLaC6ygk7RWUsUx4alKxoagQ==
+
 winston-transport@^4.3.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/winston-transport/-/winston-transport-4.4.0.tgz#17af518daa690d5b2ecccaa7acf7b20ca7925e59"
@@ -18258,7 +18276,7 @@ word-wrap@~1.2.3:
   resolved "https://registry.yarnpkg.com/word-wrap/-/word-wrap-1.2.3.tgz#610636f6b1f703891bd34771ccb17fb93b47079c"
   integrity sha512-Hz/mrNwitNRh/HUAtM/VT/5VH+ygD6DV7mYKZAtHOrbs8U7lvPS6xf7EJKMF0uW1KJCl0H701g3ZGus+muE5vQ==
 
-wordnet-db@^3.1.11, wordnet-db@^3.1.14:
+wordnet-db@^3.1.11:
   version "3.1.14"
   resolved "https://registry.yarnpkg.com/wordnet-db/-/wordnet-db-3.1.14.tgz#7ba1ec2cb5730393f0856efcc738a60085426199"
   integrity sha512-zVyFsvE+mq9MCmwXUWHIcpfbrHHClZWZiVOzKSxNJruIcFn2RbY55zkhiAMMxM8zCVSmtNiViq8FsAZSFpMYag==

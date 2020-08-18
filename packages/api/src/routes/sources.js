@@ -73,8 +73,10 @@ router.post('/',
 	wa(async (req, res) => {
 		const { category, urls } = req.body;
 		const { results, infoGroup } = await handleWordService.fetchTextFromUrl(urls, category);
-		const resp = await GroupServices.create(category, results);
-		await SourceServices.create(req.body, resp._id, infoGroup);
+		const dataGroup = { category, size: results.length, words: results };
+		const resp = await GroupServices.create(dataGroup);
+		const dataSource = { ...req.body, group: resp._id, infos: infoGroup };
+		await SourceServices.create(dataSource);
 		res.json(resp);
 	}));
 
@@ -101,9 +103,17 @@ router.put('/',
 		if (!group) throw notFound(`Ce group: ${sources.group} n'a pas été trouvée`);
 
 		const { results, infoGroup } = await handleWordService.fetchTextFromUrl(urls, category);
-
-		const resp = await GroupServices.update(sources.group, category, results);
-		await SourceServices.update(id, req.body, infoGroup);
+		const groupProp = {
+			category,
+			size: results.length,
+			words: results,
+		};
+		const sourcesProps = {
+			...req.body,
+			infos: infoGroup,
+		};
+		const resp = await GroupServices.update(sources.group, groupProp);
+		await SourceServices.update(id, sourcesProps);
 		res.json(resp);
 	}));
 

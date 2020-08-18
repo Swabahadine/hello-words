@@ -48,8 +48,10 @@ router.post('/',
 	wa(async (req, res) => {
 		const { category, urls } = req.body;
 		const { results, infoGroup } = await handleWordService.fetchTextFromUrl(urls, category);
-		const resp = await GroupServices.create(category, results);
-		await SourceServices.create(req.body, resp._id, infoGroup);
+		const dataGroup = { category, words: results };
+		const resp = await GroupServices.create(dataGroup);
+		const dataSource = { ...req.body, group: resp._id, infoGroup };
+		await SourceServices.create(dataSource);
 		res.json(resp);
 	}));
 

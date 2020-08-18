@@ -1,6 +1,6 @@
 const Group = require('../models/Group');
 
-exports.create = (category, data) => Group.create({ category, size: data.length, words: data });
+exports.create = (data) => Group.create(data);
 
 exports.findById = (id) => Group.findById(id);
 
@@ -21,12 +21,7 @@ exports.findAll = (...args) => Group.find(...args);
 // 	return old;
 // };
 
-exports.update = async (_id, category, data) => {
-	const props = {
-		category,
-		size: data.length,
-		words: data,
-	};
+exports.update = async (_id, props) => {
 	return Group.updateOne({ _id }, { $set: props });
 };
 

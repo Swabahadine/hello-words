@@ -14,6 +14,7 @@ const sourceSchema = new mongoose.Schema({
 	infos: {
 		textSize: { type: Number },
 		diffWords: { type: Number },
+		diffTags: { type: Number },
 	},
 });
 

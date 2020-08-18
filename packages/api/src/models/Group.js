@@ -9,11 +9,15 @@ const wordsShema = {
 	name: { type: String, required: true },
 	weight: { type: Number, required: true },
 };
+
+const wordsShemaMixed = {
+	name: { type: String, required: true },
+	weight: { type: Number, required: true },
+};
 const groupSchema = new mongoose.Schema({
 	...editable,
 	category: { type: String, required: true },
-	size: { type: Number, required: true },
-	words: [wordsShema],
+	words: {},
 });
 
 groupSchema.pre('save', async function preSave() {
