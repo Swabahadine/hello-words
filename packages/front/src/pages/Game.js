@@ -22,8 +22,10 @@ import {
 	convertToSentence,
 	filterDataByLevel,
 	generateMultiUniqueNum,
+	parseData,
 	shuffleArray,
 	SEPARATOR,
+	translatePosTagger as t,
 } from '../lib';
 
 // const defaultUrls = [
@@ -67,10 +69,14 @@ export default function Game({ match }) {
 		}
 	}, [infoTranslate, listWordsTranslated]);
 
-	const level = 2;//parseInt(score / 10, 10) + 1;
+	const level = parseInt(score / 10, 10) + 1;
 	useEffect(() => {
 		if (!!data) {
-			const dataFiltered = data.words.filter(filterDataByLevel(level)).slice(0, 500);
+			console.log('data', data);
+			const dataWords = parseData(data.words);
+			shuffleArray(dataWords);
+			console.log('dataWords', dataWords);
+			const dataFiltered = dataWords.slice(0, 500);//.filter(filterDataByLevel(level)).slice(0, 500);
 			const listWordsString = convertToSentence(dataFiltered.map(({ name }) => name), SEPARATOR);
 			mutate(listWordsString);
 			setListWords(dataFiltered);
@@ -97,7 +103,7 @@ export default function Game({ match }) {
 						<Col className={clsx(FLEX_CENTER, 'flex-column')}>
 							<h1>Hello Words</h1>
 							<span className="py-4">
-								{word.focusWord}
+								{`${listWords[word.focusIndex]?.name}:${t[listWords[word.focusIndex]?.tag]}:${listWords[word.focusIndex]?.weight}`}
 							</span>
 						</Col>
 					</Row>
