@@ -1,9 +1,21 @@
 /* eslint-disable no-extra-boolean-cast */
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useQuery, useMutation } from 'react-query';
 
 import {
-	Container, Row, Col, Button, Jumbotron, Card, CardHeader, CardBody, CardFooter,
+	Container,
+	Row,
+	Col,
+	Button,
+	Jumbotron,
+	Card,
+	CardHeader,
+	CardBody,
+	CardFooter,
+	Modal,
+	ModalHeader,
+	ModalBody,
+	ModalFooter,
 } from 'reactstrap';
 import clsx from 'clsx';
 
@@ -18,6 +30,7 @@ import {
 import {
 	classNames,
 } from '../lib';
+import ModalPTWords from '../components/ModalPTWords';
 
 // const defaultUrls = [
 // 	'https://medium.com/@patarkf/synchronize-your-asynchronous-code-using-javascripts-async-await-5f3fa5b1366d',
@@ -34,6 +47,13 @@ import {
 const { FLEX_CENTER, FLEX_AROUND, FLEX_BETWEEN } = classNames;
 
 export default function Board() {
+	const [idGroupWords, setIdGroupWords] = useState(undefined);
+	// Modals
+	const [modal, setModal] = useState(false);
+	
+	const toggle = useCallback(() => setModal(!modal), [modal]);
+
+
 	const history = useHistory();
 	const { isLoading, data, refetch } = useQuery('findCategories', findCategories());
 	const [mutate, {
@@ -45,6 +65,11 @@ export default function Board() {
 	const onChooseCategory = useCallback((idGroup) => {
 		history.push(`game/${idGroup}`);
 	}, [history]);
+
+	const onTrainingCategory = useCallback((idGroup) => {
+		setIdGroupWords(idGroup);
+		toggle();
+	}, [toggle]);
 
 	const onCreateCategory = useCallback(() => {
 		history.push('sources/create');
@@ -99,7 +124,7 @@ export default function Board() {
 										<b>{infos.diffWords}</b> mots différents sur un total de <b>{infos.textSize}</b>
 										{' '}mots provenant des sources.
 									</CardBody>
-									<CardFooter>
+									<CardFooter className={FLEX_BETWEEN}>
 										<Button
 											onClick={() => onChooseCategory(group)}
 											key={_id}
@@ -107,6 +132,14 @@ export default function Board() {
 											className=""
 										>
 											Jouer
+										</Button>
+										<Button
+											onClick={() => onTrainingCategory(group)}
+											key={_id}
+											color="warning"
+											className=""
+										>
+											s&apos;entrainer
 										</Button>
 									</CardFooter>
 								</Card>
@@ -116,6 +149,9 @@ export default function Board() {
 					</Row>
 				</Container>
 			</section>
+			{modal && idGroupWords && (
+				<ModalPTWords toggle={toggle} modal={modal} idGroup={idGroupWords} />
+			)}
 		</LayoutLoading>
 	);
 }
