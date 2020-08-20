@@ -13,7 +13,8 @@
     "serverless-jetpack": "^0.10.6"
   },
   "scripts": {
-    "start:api": "lerna run start --stream --scope api"
+    "start:api": "lerna run start --stream --scope api",
+    "start:front": "lerna run start --stream --scope front"
   },
   "version": "1.0.1",
   "main": "build/index.js",

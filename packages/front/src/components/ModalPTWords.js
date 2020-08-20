@@ -52,7 +52,7 @@ const ModalPTWords = ({
 			<ModalHeader toggle={toggle}>{title}</ModalHeader>
 			<LayoutLoading loading={isLoading}>
 				<ModalBody>
-					<ListPTWords data={dataParsed} />
+					<ListPTWords data={dataParsed} idGroup={idGroup} toggle={toggle} />
 				</ModalBody>
 			</LayoutLoading>
 		</Modal>

@@ -8,17 +8,19 @@ import {
 	ListGroupItemHeading,
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { translatePosTagger as t, classNames as cl } from '../lib';
+import { translatePosTagger as t } from '../lib';
 
 const ListPTWords = ({
 	data,
+	idGroup,
+	toggle,
 }) => (
 	<ListGroup>
 		{data.map(({
 			posTaggerType: type,
 			words,
 		}) => (
-			<ListGroupItem action tag={Link} to="/board">
+			<ListGroupItem key={type} action tag={Link} onClick={toggle} to={`/training/${idGroup}/${type}`}>
 				<ListGroupItemHeading className="text-black">
 					{t[type]}
 				</ListGroupItemHeading>
@@ -38,7 +40,8 @@ ListPTWords.propTypes = {
 			size: PropTypes.number,
 		}),
 	).isRequired,
-
+	idGroup: PropTypes.string.isRequired,
+	toggle: PropTypes.func.isRequired,
 };
 
 ListPTWords.defaultProps = {

@@ -11,6 +11,7 @@ import LayoutSidebar from './components/LeftSidebar';
 import PageBoard from './pages/Board';
 import PageGame from './pages/Game';
 import PageSource from './pages/Source';
+import PageTraining from './pages/Training';
 import PageSourceEdit from './pages/SourceEdit';
 
 const pathPage = (path, page) => ({ path, page });
@@ -20,6 +21,7 @@ const routerData = [
 	pathPage('/game/:idGroup', PageGame),
 	pathPage('/sources/create', PageSource),
 	pathPage('/sources/edit/:idSource', PageSourceEdit),
+	pathPage('/training/:idGroup/:posTag', PageTraining),
 ];
 const Routes = () => (
 	<HashRouter>

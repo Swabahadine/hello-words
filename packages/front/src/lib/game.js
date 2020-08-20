@@ -11,10 +11,12 @@ export const filterDataByLevel = (level) => {
 
 export const unsedTags = ['CC', 'DT', 'FW', 'N', 'NNP'];
 
-export const parseData = (obj) => {
+const isIncludeTag = (tag, includeTagsList) => !includeTagsList || includeTagsList.includes(tag);
+
+export const parseData = (obj, includeTags) => {
 	const res = [];
 	Object.keys(obj).forEach((key) => {
-		if (!unsedTags.includes(key)) {
+		if (!unsedTags.includes(key) && isIncludeTag(key, includeTags)) {
 			const tagObj = obj[key];
 			const resTag = Object.keys(tagObj).map((word) => ({
 				name: word,

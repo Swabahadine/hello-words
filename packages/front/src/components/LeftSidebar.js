@@ -1,21 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import { Nav, NavItem } from 'reactstrap';
+import { NavLink } from 'react-router-dom';
 
-// import { classNames } from '../lib';
-
-// const { FLEX_CENTER } = classNames;
+// import { classNames as cl } from '../lib';
 
 const LeftSidebar = ({ children, className, ...props }) => (
 	<div style={{ overflowY: 'auto' }} {...props} className={clsx(className, 'min-vh-100 vw-100 d-flex')}>
-		<div
-			className="vh-100 bg-dark"
+		<Nav
+			vertical
+			className={clsx('vh-100 bg-dark py-4')}
 			style={{
-				width: 100,
+				// width: 100,
 				left: 0,
 			}}
-		/>
-		{children}
+		>
+			<NavItem className="text-center w-100 py-2">
+				<NavLink className="text-light" to="/"><small>Hello Words</small></NavLink>
+			</NavItem>
+			<NavItem className="text-center w-100 py-2">
+				<NavLink className="text-light" to="/"><small>Acceuil</small></NavLink>
+			</NavItem>
+			<NavItem className="text-center w-100 py-2">
+				<NavLink className="text-light" to="/sources/create"><small>Créer une catégorie</small></NavLink>
+			</NavItem>
+		</Nav>
+		<div style={{ overflowY: 'scroll' }} className="vh-100 vw-100 bg-light">
+			{children}
+		</div>
 	</div>
 );
 
