@@ -76,7 +76,7 @@ export default function Board() {
 						<h5>Choisis une catégorie</h5>
 					</div>
 					<div>
-						<Button color="danger" onClick={() => onCreateCategory()}>
+						<Button color="dark" onClick={() => onCreateCategory()}>
 							Creer une nouvelle categorie
 						</Button>
 					</div>
@@ -89,8 +89,8 @@ export default function Board() {
 							infos = {},
 							group,
 						}) => (
-							<Col key={_id} xs="12" md="6" lg="4" className={clsx('flex-column py-2')}>
-								<Card>
+							<Col key={_id} xs="12" md="6" lg="8" className={clsx('flex-column py-2')}>
+								<Card color="light" className="">
 									<CardHeader className={clsx(FLEX_BETWEEN)}>
 										<b>{category}</b>
 										<div>
@@ -107,19 +107,19 @@ export default function Board() {
 										{' '}mots provenant des sources.
 									</CardBody>
 									<CardFooter className={FLEX_BETWEEN}>
-										<Button
+										{/* <Button
 											onClick={() => onChooseCategory(group)}
 											color="info"
 											className=""
 										>
 											Jouer
-										</Button>
+										</Button> */}
 										<Button
 											onClick={() => onTrainingCategory(group)}
-											color="warning"
+											color="info"
 											className=""
 										>
-											s&apos;entrainer
+											Se connecter
 										</Button>
 									</CardFooter>
 								</Card>

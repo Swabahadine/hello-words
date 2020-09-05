@@ -16,6 +16,7 @@ import {
 import { translateTofrench } from '../frontApi/translateApi';
 
 import {
+	approximativeWords,
 	classNames,
 	convertToArray,
 	convertToSentence,
@@ -33,6 +34,8 @@ export default function Training({ match }) {
 	// Modals
 	const [modal, setModal] = useState(false);
 	const toggle = useCallback(() => setModal(!modal), [modal]);
+
+	const [isApp, setIsApp] = useState(false);
 
 	const [listWords, setListWords] = useState([]);
 	const [listWordsTranslated, setListWordsTranslated] = useState([]);
@@ -59,9 +62,24 @@ export default function Training({ match }) {
 		}
 	}, [data, mutate, posTag]);
 
+	useEffect(() => {
+		if (!isApp && listWords.length > 0 && listWordsTranslated.length > 0) {
+			const removerI = [];
+			listWords.forEach(({ name }, i) => {
+				if (approximativeWords(name, listWordsTranslated[i])) {
+					removerI.push(i);
+				}
+			});
+			setListWords((prev) => ([...prev.filter((w, idx) => !removerI.includes(idx))]));
+			setListWordsTranslated((prev) => ([...prev.filter((w, idx) => !removerI.includes(idx))]));
+			setIsApp(true);
+		}
+	}, [isApp, listWords, listWordsTranslated]);
+
 	if (error) return `An error has occurred: ${error.message}`;
 	// console.log('listWords', listWords);
 	// console.log('tr', infoTranslate?.data?.text);
+
 	return (
 		<LayoutLoading loading={isLoading}>
 			<Container className={clsx(FLEX_CENTER, ' flex-column h-100')}>
@@ -91,7 +109,12 @@ export default function Training({ match }) {
 								</thead>
 								<tbody>
 									{listWords.map((w, index) => (
-										<tr key={w.name}>
+										<tr
+											onClick={() => {
+												console.log(listWords[index]);
+											}}
+											key={w.name}
+										>
 											<th scope="row">{index + 1}</th>
 											<td>{w.name}</td>
 											<td>{listWordsTranslated[index]}</td>
