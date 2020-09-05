@@ -62,6 +62,7 @@ const initialState = {
 	category: '',
 };
 
+let isFetched = false;
 export default function SourceEdit({ match }) {
 	const { idSource } = match.params;
 	const { isLoading: load, data } = useQuery('findCategoryById', findCategoryById(idSource));
@@ -69,9 +70,10 @@ export default function SourceEdit({ match }) {
 
 	const [formData, setFormData] = useState(initialState);
 	useEffect(() => {
-		if (data) {
+		if (data && !isFetched) {
 			const { urls, category } = data;
 			setFormData({ urls, category });
+			isFetched = true;
 		}
 	}, [data]);
 	const [mutate, {
@@ -205,6 +207,7 @@ export default function SourceEdit({ match }) {
 							</Col>
 						</Row>
 					</Container>
+					<div style={{ height: 100 }} />
 				</section>
 			</LayoutLoading>
 		</Form>

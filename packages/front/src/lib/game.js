@@ -1,4 +1,4 @@
-export const SEPARATOR = '.\n ';
+export const SEPARATOR = '\n\n ';
 
 export const filterDataByLevel = (level) => {
 	switch (level) {
