@@ -1,6 +1,8 @@
 const express = require('express');
 const { validator, wrapAsync: wa } = require('express-server-app');
 
+const { withToken } = require('../session/withToken');
+
 const handleWordService = require('../service/handleWord');
 const GroupServices = require('../service/Group');
 const SourceServices = require('../service/Source');
@@ -20,7 +22,9 @@ const SourceServices = require('../service/Source');
 const router = express.Router();
 
 router.get('/categories',
+	withToken,
 	wa(async (req, res) => {
+		console.log('TokToken', req.session.token);
 		const categories = await SourceServices.findAll();
 		res.json(categories);
 	}));

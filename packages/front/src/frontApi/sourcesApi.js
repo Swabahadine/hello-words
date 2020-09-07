@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import { requestParamJson, requestJson, createBody } from './lib';
 
-const PATH = 'sources';
+const PATH = 'category';
 
 export const wordByCategory = (category) => async () => {
 	const result = await requestParamJson(PATH, category);
@@ -14,6 +14,7 @@ export const createCategory = (data) => async () => {
 };
 
 export const updateCategory = (data) => async () => {
+	console.log('update', data);
 	const result = await requestJson(PATH, createBody(data, 'PUT'));
 	return result.json();
 };

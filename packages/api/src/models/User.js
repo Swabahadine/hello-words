@@ -5,14 +5,13 @@ const editable = {
 	updatedAt: { type: Date, required: true, default: new Date().toISOString() },
 };
 
-const groupSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
 	...editable,
-	category: { type: String, required: true },
-	words: {},
+	uuid: { type: String },
 });
 
-groupSchema.pre('save', async function preSave() {
+userSchema.pre('save', async function preSave() {
 	this.updatedAt = new Date().toISOString();
 });
 
-module.exports = mongoose.model('Group', groupSchema);
+module.exports = mongoose.model('user', userSchema);

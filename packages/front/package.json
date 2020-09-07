@@ -18,6 +18,7 @@
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-async-hook": "^3.6.1",
+    "react-cookie": "^4.0.3",
     "react-dom": "^16.13.1",
     "react-jsonschema-form-validation": "^0.5.6",
     "react-metismenu": "^1.4.0",
@@ -26,6 +27,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-select": "^3.1.0",
+    "react-uuid": "^1.0.2",
     "reactstrap": "^8.5.1"
   },
   "scripts": {

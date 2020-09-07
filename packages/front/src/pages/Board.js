@@ -1,5 +1,5 @@
 /* eslint-disable no-extra-boolean-cast */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useContext } from 'react';
 import { useQuery, useMutation } from 'react-query';
 
 import {
@@ -27,6 +27,7 @@ import {
 	classNames,
 } from '../lib';
 import ModalPTWords from '../components/ModalPTWords';
+import ContextCookie from '../ContextCookie';
 
 const { FLEX_CENTER, FLEX_AROUND, FLEX_BETWEEN } = classNames;
 
@@ -65,6 +66,7 @@ export default function Board() {
 		await mutate({ id });
 		refetch();
 	}, [mutate, refetch]);
+	console.log('data', data);
 	return (
 		<LayoutLoading loading={isLoading || isLoadingMutate || !data}>
 			<section style={{ overflowY: 'scroll' }} className="vh-100 w-100">
