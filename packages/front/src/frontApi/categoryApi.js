@@ -18,6 +18,7 @@ export const createCategory = (data) => async () => {
 };
 
 export const updateCategory = (data) => async () => {
+	console.log('update', data);
 	const result = await requestJson(PATH, createBody(data, 'PUT'));
 	return result.json();
 };
