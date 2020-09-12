@@ -11,12 +11,6 @@ const sourceSchema = new mongoose.Schema({
 	category: { type: String, required: true },
 	urls: [{ type: String }],
 	text: { type: String },
-	group: { type: mongoose.Schema.Types.ObjectId, ref: 'Group' },
-	infos: {
-		textSize: { type: Number },
-		diffWords: { type: Number },
-		diffTags: { type: Number },
-	},
 });
 
 sourceSchema.pre('save', async function preSave() {

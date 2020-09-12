@@ -110,7 +110,7 @@ router.post('/',
 		const { results, infoGroup } = await handleWordService.fetchTextFromUrl(urls, category);
 		const dataGroup = { category, size: results.length, words: results };
 		const resp = await GroupServices.create(dataGroup);
-		const dataSource = { ...req.body, group: resp._id, infos: infoGroup };
+		const dataSource = { ...req.body };
 		const sources = await SourceServices.create(dataSource);
 		await CatServices.create({
 			owner: uuid,
@@ -158,7 +158,6 @@ router.put('/',
 		};
 		const sourcesProps = {
 			...req.body,
-			infos: infoGroup,
 		};
 
 		const catProps = {
