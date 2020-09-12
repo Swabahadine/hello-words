@@ -13,7 +13,7 @@ import { LayoutLoading } from './uikit';
 import {
 	wordById,
 	// createCategory,
-} from '../frontApi/groupApi';
+} from '../frontApi/categoryApi';
 import ListPTWords from './ListPTWords';
 import { unsedTags, shuffleArray } from '../lib';
 
@@ -39,10 +39,10 @@ const parseData = (data = {}) => {
 const ModalPTWords = ({
 	toggle,
 	modal,
-	idGroup,
+	id,
 }) => {
 	const [dataParsed, setDataParsed] = useState([]);
-	const { isLoading, data } = useQuery('wordByCategory', wordById(idGroup));
+	const { isLoading, data } = useQuery('wordByCategory', wordById(id));
 	const title = `${data?.category} - choisis la catégorie que tu souhaites apprendre`;
 	useEffect(() => {
 		if (data?.words) setDataParsed(parseData(data.words));
@@ -52,7 +52,7 @@ const ModalPTWords = ({
 			<ModalHeader toggle={toggle}>{title}</ModalHeader>
 			<LayoutLoading loading={isLoading}>
 				<ModalBody>
-					<ListPTWords data={dataParsed} idGroup={idGroup} toggle={toggle} />
+					<ListPTWords data={dataParsed} id={id} toggle={toggle} />
 				</ModalBody>
 			</LayoutLoading>
 		</Modal>
@@ -62,7 +62,7 @@ const ModalPTWords = ({
 ModalPTWords.propTypes = {
 	toggle: PropTypes.func.isRequired,
 	modal: PropTypes.bool.isRequired,
-	idGroup: PropTypes.string.isRequired,
+	id: PropTypes.string.isRequired,
 };
 
 ModalPTWords.defaultProps = {

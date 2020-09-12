@@ -12,7 +12,7 @@ import { translatePosTagger as t } from '../lib';
 
 const ListPTWords = ({
 	data,
-	idGroup,
+	id,
 	toggle,
 }) => (
 	<ListGroup>
@@ -20,7 +20,7 @@ const ListPTWords = ({
 			posTaggerType: type,
 			words,
 		}) => (
-			<ListGroupItem key={type} action tag={Link} onClick={toggle} to={`/training/${idGroup}/${type}`}>
+			<ListGroupItem key={type} action tag={Link} onClick={toggle} to={`/training/${id}/${type}`}>
 				<ListGroupItemHeading className="text-black">
 					{t[type]}
 				</ListGroupItemHeading>
@@ -40,7 +40,7 @@ ListPTWords.propTypes = {
 			size: PropTypes.number,
 		}),
 	).isRequired,
-	idGroup: PropTypes.string.isRequired,
+	id: PropTypes.string.isRequired,
 	toggle: PropTypes.func.isRequired,
 };
 

@@ -13,14 +13,14 @@ import { LayoutLoading } from '../components/uikit';
 import {
 	wordById,
 	// createCategory,
-} from '../frontApi/groupApi';
+} from '../frontApi/categoryApi';
 import { translateTofrench } from '../frontApi/translateApi';
 
 import {
 	classNames,
 	convertToArray,
 	convertToSentence,
-	filterDataByLevel,
+	// filterDataByLevel,
 	generateMultiUniqueNum,
 	parseData,
 	shuffleArray,
@@ -43,7 +43,7 @@ import {
 const { FLEX_CENTER } = classNames;
 
 export default function Game({ match }) {
-	const { idGroup } = match.params;
+	const { idCat } = match.params;
 	const [word, setWord] = useState({
 		focusWord: 'welcome',
 		focusIndex: 0,
@@ -55,7 +55,7 @@ export default function Game({ match }) {
 
 	const [mutate, infoTranslate] = useMutation(translateTofrench);
 
-	const { isLoading, error, data } = useQuery('wordByCategory', wordById(idGroup));
+	const { isLoading, error, data } = useQuery('wordByCategory', wordById(idCat));
 	// const {
 	// 	isLoading,
 	// 	error,
@@ -72,11 +72,10 @@ export default function Game({ match }) {
 	const level = parseInt(score / 10, 10) + 1;
 	useEffect(() => {
 		if (!!data) {
-			console.log('data', data);
 			const dataWords = parseData(data.words);
 			shuffleArray(dataWords);
-			console.log('dataWords', dataWords);
-			const dataFiltered = dataWords.slice(0, 500);//.filter(filterDataByLevel(level)).slice(0, 500);
+			const dataFiltered = dataWords.slice(0, 500);
+			//.filter(filterDataByLevel(level)).slice(0, 500);
 			const listWordsString = convertToSentence(dataFiltered.map(({ name }) => name), SEPARATOR);
 			mutate(listWordsString);
 			setListWords(dataFiltered);
@@ -169,7 +168,7 @@ export default function Game({ match }) {
 Game.propTypes = {
 	match: PropTypes.shape({
 		params: PropTypes.shape({
-			idGroup: PropTypes.string,
+			idCat: PropTypes.string,
 		}),
 	}).isRequired,
 };

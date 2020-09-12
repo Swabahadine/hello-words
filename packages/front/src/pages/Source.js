@@ -17,7 +17,7 @@ import {
 import {
 	// findCategories,
 	createCategory,
-} from '../frontApi/sourcesApi';
+} from '../frontApi/categoryApi';
 
 import {
 	classNames,

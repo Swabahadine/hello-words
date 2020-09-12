@@ -18,7 +18,7 @@ import {
 import {
 	findCategoryById,
 	updateCategory,
-} from '../frontApi/sourcesApi';
+} from '../frontApi/categoryApi';
 
 import {
 	classNames,
@@ -62,20 +62,19 @@ const initialState = {
 	category: '',
 };
 
-let isFetched = false;
 export default function SourceEdit({ match }) {
 	const { idSource } = match.params;
 	const { isLoading: load, data } = useQuery('findCategoryById', findCategoryById(idSource));
 	const history = useHistory();
-
+	const [isFetched, setIsFecthed] = useState(false);
 	const [formData, setFormData] = useState(initialState);
 	useEffect(() => {
 		if (data && !isFetched) {
 			const { urls, category } = data;
 			setFormData({ urls, category });
-			isFetched = true;
+			setIsFecthed(true);
 		}
-	}, [data]);
+	}, [data, isFetched]);
 	const [mutate, {
 		// isError,
 		isLoading,

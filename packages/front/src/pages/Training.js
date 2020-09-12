@@ -12,7 +12,7 @@ import { LayoutLoading } from '../components/uikit';
 
 import {
 	wordById,
-} from '../frontApi/groupApi';
+} from '../frontApi/categoryApi';
 import { translateTofrench } from '../frontApi/translateApi';
 
 import {
@@ -29,7 +29,7 @@ import ModalPTWords from '../components/ModalPTWords';
 const { FLEX_CENTER } = classNames;
 
 export default function Training({ match }) {
-	const { idGroup, posTag } = match.params;
+	const { idCat, posTag } = match.params;
 
 	// Modals
 	const [modal, setModal] = useState(false);
@@ -42,7 +42,7 @@ export default function Training({ match }) {
 
 	const [mutate, infoTranslate] = useMutation(translateTofrench);
 
-	const { isLoading, error, data } = useQuery('wordByCategory', wordById(idGroup));
+	const { isLoading, error, data } = useQuery('wordByCategory', wordById(idCat));
 
 	useEffect(() => {
 		if (infoTranslate?.data?.text && listWordsTranslated.length === 0) {
@@ -127,8 +127,8 @@ export default function Training({ match }) {
 					</Col>
 				</Row>
 			</Container>
-			{modal && idGroup && (
-				<ModalPTWords toggle={toggle} modal={modal} idGroup={idGroup} />
+			{modal && idCat && (
+				<ModalPTWords toggle={toggle} modal={modal} id={idCat} />
 			)}
 		</LayoutLoading>
 	);
@@ -137,7 +137,7 @@ export default function Training({ match }) {
 Training.propTypes = {
 	match: PropTypes.shape({
 		params: PropTypes.shape({
-			idGroup: PropTypes.string,
+			idCat: PropTypes.string,
 			posTag: PropTypes.string,
 		}),
 	}).isRequired,

@@ -5,13 +5,12 @@ const editable = {
 	updatedAt: { type: Date, required: true, default: new Date().toISOString() },
 };
 
-const sourceSchema = new mongoose.Schema({
+const categorySchema = new mongoose.Schema({
 	...editable,
 	owner: { type: String },
 	category: { type: String, required: true },
-	urls: [{ type: String }],
-	text: { type: String },
 	group: { type: mongoose.Schema.Types.ObjectId, ref: 'Group' },
+	sources: { type: mongoose.Schema.Types.ObjectId, ref: 'Source' },
 	infos: {
 		textSize: { type: Number },
 		diffWords: { type: Number },
@@ -19,8 +18,8 @@ const sourceSchema = new mongoose.Schema({
 	},
 });
 
-sourceSchema.pre('save', async function preSave() {
+categorySchema.pre('save', async function preSave() {
 	this.updatedAt = new Date().toISOString();
 });
 
-module.exports = mongoose.model('Source', sourceSchema);
+module.exports = mongoose.model('Category', categorySchema);

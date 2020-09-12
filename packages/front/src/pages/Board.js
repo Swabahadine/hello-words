@@ -21,7 +21,7 @@ import { LayoutLoading } from '../components/uikit';
 import {
 	findCategories,
 	deleteCategory,
-} from '../frontApi/sourcesApi';
+} from '../frontApi/categoryApi';
 
 import {
 	classNames,
@@ -31,7 +31,7 @@ import ModalPTWords from '../components/ModalPTWords';
 const { FLEX_CENTER, FLEX_AROUND, FLEX_BETWEEN } = classNames;
 
 export default function Board() {
-	const [idGroupWords, setIdGroupWords] = useState(undefined);
+	const [idCat, setIdCat] = useState(undefined);
 	// Modals
 	const [modal, setModal] = useState(false);
 	const toggle = useCallback(() => setModal(!modal), [modal]);
@@ -44,12 +44,12 @@ export default function Board() {
 		// isSuccess,
 	}] = useMutation((body) => deleteCategory(body));
 
-	const onChooseCategory = useCallback((idGroup) => {
-		history.push(`game/${idGroup}`);
-	}, [history]);
+	// const onChooseCategory = useCallback((idGroup) => {
+	// 	history.push(`game/${idGroup}`);
+	// }, [history]);
 
 	const onTrainingCategory = useCallback((idGroup) => {
-		setIdGroupWords(idGroup);
+		setIdCat(idGroup);
 		toggle();
 	}, [toggle]);
 
@@ -87,7 +87,6 @@ export default function Board() {
 							_id,
 							category,
 							infos = {},
-							group,
 						}) => (
 							<Col key={_id} xs="12" md="6" lg="8" className={clsx('flex-column py-2')}>
 								<Card color="light" className="">
@@ -115,7 +114,7 @@ export default function Board() {
 											Jouer
 										</Button> */}
 										<Button
-											onClick={() => onTrainingCategory(group)}
+											onClick={() => onTrainingCategory(_id)}
 											color="info"
 											className=""
 										>
@@ -129,8 +128,8 @@ export default function Board() {
 					</Row>
 				</Container>
 			</section>
-			{modal && idGroupWords && (
-				<ModalPTWords toggle={toggle} modal={modal} idGroup={idGroupWords} />
+			{modal && idCat && (
+				<ModalPTWords toggle={toggle} modal={modal} id={idCat} />
 			)}
 		</LayoutLoading>
 	);

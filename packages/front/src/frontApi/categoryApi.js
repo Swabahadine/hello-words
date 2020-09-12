@@ -1,10 +1,14 @@
-/* eslint-disable import/prefer-default-export */
 import { requestParamJson, requestJson, createBody } from './lib';
 
-const PATH = 'sources';
+const PATH = 'category';
 
 export const wordByCategory = (category) => async () => {
 	const result = await requestParamJson(PATH, category);
+	return result.json();
+};
+
+export const wordById = (id) => async () => {
+	const result = await requestParamJson(`${PATH}/words`, id);
 	return result.json();
 };
 
@@ -24,7 +28,7 @@ export const deleteCategory = async (data) => {
 };
 
 export const findCategoryById = (id) => async () => {
-	const result = await requestParamJson(PATH, id);
+	const result = await requestParamJson(`${PATH}/sources`, id);
 	return result.json();
 };
 
