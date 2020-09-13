@@ -8,7 +8,7 @@ const LayoutLoading = ({
 }) => (
 	<>
 		{loading ? (
-			<div className="d-flex justify-content-center align-items-center vh-100 vw-100">
+			<div className="d-flex justify-content-center align-items-center vh-100 w-100">
 				<Spinner />
 			</div>
 		) : (

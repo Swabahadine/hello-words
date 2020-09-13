@@ -49,8 +49,8 @@ const ModalPTWords = ({
 	}, [data]);
 	return (
 		<Modal size="lg" isOpen={modal} toggle={toggle}>
-			<ModalHeader toggle={toggle}>{title}</ModalHeader>
 			<LayoutLoading loading={isLoading}>
+				<ModalHeader toggle={toggle}>{title}</ModalHeader>
 				<ModalBody>
 					<ListPTWords data={dataParsed} id={id} toggle={toggle} />
 				</ModalBody>

@@ -42,7 +42,7 @@ export default function Training({ match }) {
 
 	const [mutate, infoTranslate] = useMutation(translateTofrench);
 
-	const { isLoading, error, data } = useQuery('wordByCategory', wordById(idCat));
+	const { error, data } = useQuery('wordByCategory', wordById(idCat));
 
 	useEffect(() => {
 		if (infoTranslate?.data?.text && listWordsTranslated.length === 0) {
@@ -79,24 +79,23 @@ export default function Training({ match }) {
 	if (error) return `An error has occurred: ${error.message}`;
 	// console.log('listWords', listWords);
 	// console.log('tr', infoTranslate?.data?.text);
-
 	return (
-		<LayoutLoading loading={isLoading}>
-			<Container className={clsx(FLEX_CENTER, ' flex-column h-100')}>
-				<Row className={clsx(FLEX_CENTER, 'w-100')}>
-					<Col xs="12" lg="5" className="py-4">
-						<h3 className="py-4 text-info">{data?.category}</h3>
-						<div className="py-2 w-100">
-							<h2>Type : {t[posTag]}</h2>
-							<span className="text-right w-100">
-								{`${listWords.length} mots`}
-							</span>
-						</div>
-						<Button color="info" onClick={toggle}>
-							Changer de type
-						</Button>
-					</Col>
-					<Col style={{ overflowY: 'auto' }} xs="12" lg="7" className={clsx(FLEX_CENTER, 'flex-column h-100')}>
+		<Container className={clsx(FLEX_CENTER, ' flex-column h-100')}>
+			<Row className={clsx(FLEX_CENTER, 'w-100')}>
+				<Col xs="12" lg="5" className="py-4">
+					<h3 className="py-4 text-info">{data?.category || '...'}</h3>
+					<div className="py-2 w-100">
+						<h2>Type : {t[posTag]}</h2>
+						<span className="text-right w-100">
+							{listWordsTranslated.length > 0 ? `${listWordsTranslated.length} mots` : 'Calcul de nombre de mots ...'}
+						</span>
+					</div>
+					<Button color="info" onClick={toggle}>
+						Changer de type
+					</Button>
+				</Col>
+				<Col style={{ overflowY: 'auto' }} xs="12" lg="7" className={clsx(FLEX_CENTER, 'flex-column h-100')}>
+					<LayoutLoading loading={infoTranslate.status !== 'success'}>
 						<div style={{ height: '500px', width: '100%' }}>
 							<Table hover responsive bordered dark>
 								<thead>
@@ -124,13 +123,14 @@ export default function Training({ match }) {
 								</tbody>
 							</Table>
 						</div>
-					</Col>
-				</Row>
-			</Container>
+					</LayoutLoading>
+				</Col>
+			</Row>
 			{modal && idCat && (
 				<ModalPTWords toggle={toggle} modal={modal} id={idCat} />
 			)}
-		</LayoutLoading>
+		</Container>
+
 	);
 }
 
