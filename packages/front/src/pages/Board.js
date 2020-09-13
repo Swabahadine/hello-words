@@ -88,7 +88,7 @@ export default function Board() {
 							category,
 							infos = {},
 						}) => (
-							<Col key={_id} xs="12" md="6" lg="8" className={clsx('flex-column py-2')}>
+							<Col key={_id} xs="12" md="12" lg="8" className={clsx('flex-column py-2')}>
 								<Card color="light" className="">
 									<CardHeader className={clsx(FLEX_BETWEEN)}>
 										<b>{category}</b>

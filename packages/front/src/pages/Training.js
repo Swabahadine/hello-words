@@ -82,8 +82,8 @@ export default function Training({ match }) {
 	return (
 		<Container className={clsx(FLEX_CENTER, ' flex-column h-100')}>
 			<Row className={clsx(FLEX_CENTER, 'w-100')}>
-				<Col xs="12" lg="5" className="py-4">
-					<h3 className="py-4 text-info">{data?.category || '...'}</h3>
+				<Col xs="12" lg="5" className="pt-4">
+					<h3 className="text-info">{data?.category || '...'}</h3>
 					<div className="py-2 w-100">
 						<h2>Type : {t[posTag]}</h2>
 						<span className="text-right w-100">
@@ -94,9 +94,9 @@ export default function Training({ match }) {
 						Changer de type
 					</Button>
 				</Col>
-				<Col style={{ overflowY: 'auto' }} xs="12" lg="7" className={clsx(FLEX_CENTER, 'flex-column h-100')}>
+				<Col xs="12" lg="7" className={clsx('d-flex flex-column h-100')}>
 					<LayoutLoading loading={infoTranslate.status !== 'success'}>
-						<div style={{ height: '500px', width: '100%' }}>
+						<div style={{ overflowY: 'auto', height: '500px', width: '100%' }}>
 							<Table hover responsive bordered dark>
 								<thead>
 									<tr>

@@ -26,7 +26,7 @@ const LeftSidebar = ({ children, className, ...props }) => (
 				<NavLink className="text-light" to="/sources/create"><small>Créer une catégorie</small></NavLink>
 			</NavItem>
 		</Nav>
-		<div style={{ overflowY: 'scroll' }} className="vh-100 vw-100 bg-light">
+		<div style={{ overflowY: 'auto' }} className="vh-100 vw-100 bg-light">
 			{children}
 		</div>
 	</div>
