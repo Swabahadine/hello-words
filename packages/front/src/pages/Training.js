@@ -35,7 +35,7 @@ export default function Training({ match }) {
 	const [modal, setModal] = useState(false);
 	const toggle = useCallback(() => setModal(!modal), [modal]);
 
-	const [isApp, setIsApp] = useState(false);
+	// const [isApp, setIsApp] = useState(false);
 
 	const [listWords, setListWords] = useState([]);
 	const [listWordsTranslated, setListWordsTranslated] = useState([]);
@@ -62,19 +62,19 @@ export default function Training({ match }) {
 		}
 	}, [data, mutate, posTag]);
 
-	useEffect(() => {
-		if (!isApp && listWords.length > 0 && listWordsTranslated.length > 0) {
-			const removerI = [];
-			listWords.forEach(({ name }, i) => {
-				if (approximativeWords(name, listWordsTranslated[i])) {
-					removerI.push(i);
-				}
-			});
-			setListWords((prev) => ([...prev.filter((w, idx) => !removerI.includes(idx))]));
-			setListWordsTranslated((prev) => ([...prev.filter((w, idx) => !removerI.includes(idx))]));
-			setIsApp(true);
-		}
-	}, [isApp, listWords, listWordsTranslated]);
+	// useEffect(() => {
+	// 	if (!isApp && listWords.length > 0 && listWordsTranslated.length > 0) {
+	// 		const removerI = [];
+	// 		listWords.forEach(({ name }, i) => {
+	// 			if (approximativeWords(name, listWordsTranslated[i])) {
+	// 				removerI.push(i);
+	// 			}
+	// 		});
+	// 		setListWords((prev) => ([...prev.filter((w, idx) => !removerI.includes(idx))]));
+	// 		setListWordsTranslated((prev) => ([...prev.filter((w, idx) => !removerI.includes(idx))]));
+	// 		setIsApp(true);
+	// 	}
+	// }, [isApp, listWords, listWordsTranslated]);
 
 	if (error) return `An error has occurred: ${error.message}`;
 	// console.log('listWords', listWords);
@@ -104,6 +104,7 @@ export default function Training({ match }) {
 										<th>Mot anglais</th>
 										<th>Traduction</th>
 										<th>Poids</th>
+										<th>Difficulté</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -118,6 +119,11 @@ export default function Training({ match }) {
 											<td>{w.name}</td>
 											<td>{listWordsTranslated[index]}</td>
 											<td>{w.weight}</td>
+											<td>{
+												approximativeWords(w.name, listWordsTranslated[index])
+													? 1 : 2
+											}
+											</td>
 										</tr>
 									)) }
 								</tbody>
