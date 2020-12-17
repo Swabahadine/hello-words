@@ -4,6 +4,7 @@ const { notFound } = require('@hapi/boom');
 
 const handleWordService = require('../service/handleWord');
 const GroupServices = require('../service/Group');
+const WordServices = require('../service/Word');
 const SourceServices = require('../service/Source');
 const CatServices = require('../service/Category');
 const { withToken } = require('../session/withToken');
@@ -112,13 +113,15 @@ router.post('/',
 		const resp = await GroupServices.create(dataGroup);
 		const dataSource = { ...req.body };
 		const sources = await SourceServices.create(dataSource);
-		await CatServices.create({
+		const cat = await CatServices.create({
 			owner: uuid,
 			category,
 			sources: sources._id,
 			group: resp._id,
 			infos: infoGroup,
 		});
+		const arr = handleWordService.parseForModelWord(results, cat.id);
+		await WordServices.insertMany(arr);
 		res.json(resp);
 	}));
 
@@ -167,6 +170,32 @@ router.put('/',
 		const resp = await GroupServices.update(cat.group, groupProp);
 		await SourceServices.update(cat.sources, sourcesProps);
 		await CatServices.update(id, catProps);
+		res.json(resp);
+	}));
+
+router.put('/save-word',
+	// withToken,
+	// validator().validate({
+	// 	body: {
+	// 		type: 'object',
+	// 		additionalProperties: false,
+	// 		properties: {
+	// 			id: { type: 'string' },
+	// 		},
+	// 		required: ['id'],
+
+	// 	},
+	// }),
+	wa(async (req, res) => {
+		// const uuid = req.session.token;
+		// const { id } = req.body;
+
+		// const cat = await CatServices.findByIdOwner(id, uuid);
+		// if (!cat) throw notFound(`Cette catégorie: ${id} n'a pas été trouvée`);
+
+		// const group = GroupServices.findById('5f5d2facd98ac824789f19ab');
+		// if (!group) throw notFound(`Ce group: ${cat.group} n'a pas été trouvée`);
+		const resp = await GroupServices.saveWord('5f5d2facd98ac824789f19ab', 'JJ', 'public');
 		res.json(resp);
 	}));
 

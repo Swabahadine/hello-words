@@ -20,7 +20,7 @@ export const parseData = (obj, includeTags) => {
 			const tagObj = obj[key];
 			const resTag = Object.keys(tagObj).map((word) => ({
 				name: word,
-				weight: tagObj[word],
+				weight: tagObj[word].weight,
 				tag: key,
 			}));
 			res.push(...resTag);

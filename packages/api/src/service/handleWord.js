@@ -21,13 +21,13 @@ const posTaggerObj = (dataArray) => {
 	words.forEach(({ token, tag }) => {
 		const tokLowCase = token.toLowerCase();
 		if (res[tag] === undefined) {
-			res[tag] = { [tokLowCase]: 1 };
+			res[tag] = { [tokLowCase]: { weight: 1 } };
 			diffTags += 1;
 		} else if (res[tag][tokLowCase] === undefined) {
-			res[tag][tokLowCase] = 1;
+			res[tag][tokLowCase] = { weight: 1 };
 			diffWords += 1;
 		} else {
-			res[tag][tokLowCase] += 1;
+			res[tag][tokLowCase].weight += 1;
 		}
 	});
 	return {
@@ -55,4 +55,19 @@ module.exports.fetchTextFromUrl = async (urls) => {
 	const resPosTaggerObj = posTaggerObj(rootTok);
 
 	return resPosTaggerObj;
+};
+
+exports.parseForModelWord = (obj, category) => {
+	const res = [];
+	Object.keys(obj).forEach((tag) => {
+		Object.keys(obj[tag]).forEach((wordObj) => {
+			res.push({
+				value: wordObj,
+				posTag: tag,
+				weight: obj[tag][wordObj].weight,
+				category,
+			});
+		});
+	});
+	return res;
 };

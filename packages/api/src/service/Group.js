@@ -10,6 +10,12 @@ exports.findAllCategories = () => Group.find({}, 'category');
 
 exports.findAll = (...args) => Group.find(...args);
 
+exports.saveWord = async (_id, tag, word) => {
+	return Group.updateOne({ _id }, {
+		$set: { words: { [tag]: { [word]: { saved: true } } } },
+	});
+};
+
 // exports.update = async (old, category, data) => {
 // 	const props = {
 // 		category,
@@ -21,8 +27,6 @@ exports.findAll = (...args) => Group.find(...args);
 // 	return old;
 // };
 
-exports.update = async (_id, props) => {
-	return Group.updateOne({ _id }, { $set: props });
-};
+exports.update = async (_id, props) => Group.updateOne({ _id }, { $set: props });
 
 exports.delete = (id) => Group.deleteOne({ _id: id });
