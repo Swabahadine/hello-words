@@ -6,7 +6,7 @@ import Routes from './Routes';
 
 import ContextCookie from './ContextCookie';
 
-export default function App() {
+export default function App() { 
 	const [cookies, setCookie] = useCookies(['hello-words-identificator']);
 	if (!cookies.uuid) {
 		const date = new Date();
