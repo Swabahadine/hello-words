@@ -1,0 +1,20 @@
+version: '2'
+services:
+  root:
+    build: ./
+  client:
+    build: ./packages/front
+    ports:
+      - '3000:3000'
+    depends_on:
+      - backend
+  backend:
+    build: ./packages/api
+    ports:
+      - '9003:9003'
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo
+    ports:
+      - '27017:27017'
