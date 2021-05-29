@@ -1,13 +1,15 @@
 version: '2'
 services:
   client:
-    build: ./packages/front
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    build: ./front
     ports:
       - '3000:3000'
     depends_on:
       - backend
   backend:
-    build: ./packages/api
+    build: ./api
     ports:
       - '9003:9003'
     depends_on:
@@ -16,3 +18,4 @@ services:
     image: mongo
     ports:
       - '27017:27017'
+  
