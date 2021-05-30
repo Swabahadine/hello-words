@@ -20,6 +20,7 @@ export default function App() {
 	});
 	return (
 		<ContextCookie.Provider value={[state, setState]}>
+			<small>You are running this application in <b>{process.env.NODE_ENV}</b> mode.</small>
 			<Routes />
 		</ContextCookie.Provider>
 	);
