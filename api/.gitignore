@@ -1,6 +1,7 @@
 storage
 uploads
 .env
+.env.local
 node_modules/
 public/node_modules
 coverage
