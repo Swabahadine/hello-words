@@ -3,6 +3,13 @@
   "version": "1.0.1",
   "description": "",
   "main": "index.js",
+  "apps": [
+    {
+        "name": "hello-words-api",
+        "script": "npm",
+        "args" : "start"
+    }
+],
   "engines": {
     "node": "14.x",
     "yarn": "1.x"
