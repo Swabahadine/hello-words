@@ -6,7 +6,7 @@
   "apps": [
     {
         "name": "hello-words-api",
-        "script": "npm",
+        "script": "express-server-app",
         "args" : "start"
     }
 ],
