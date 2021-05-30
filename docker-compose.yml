@@ -1,13 +1,13 @@
 version: '2'
 services:
-  client:
-    stdin_open: true # docker run -i
-    tty: true        # docker run -t
-    build: ./front
-    ports:
-      - '3000:3000'
-    depends_on:
-      - backend
+  # client:
+  #   stdin_open: true # docker run -i
+  #   tty: true        # docker run -t
+  #   build: ./front
+  #   ports:
+  #     - '3000:3000'
+  #   depends_on:
+  #     - backend
   backend:
     build: ./api
     ports:
