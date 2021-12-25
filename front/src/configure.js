@@ -1,2 +1,2 @@
 /* eslint-disable import/prefer-default-export */
-export const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:9003';
+export const API_URL = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_DEV : process.env.REACT_APP_API_URL_PROD;
